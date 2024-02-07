@@ -16,6 +16,9 @@ function createWindow() {
         slashes: true
     }))
 
+    //Show Firebug
+    window.webContents.openDevTools();
+
     window.on("closed", () => {
         window = null;
     })
