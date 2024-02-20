@@ -1,0 +1,13 @@
+tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+table, td, th {
+    /*table-layout:fixed;*/
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: hidden;
+    resize:horizontal;
+}
