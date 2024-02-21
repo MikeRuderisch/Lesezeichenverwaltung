@@ -118,5 +118,138 @@
     "Title": "The Potential of Augmented Reality in Education",
     "Date": "2024-02-20",
     "Tags": ["Augmented Reality", "Education", "Technology"]
+  },
+  
+  {
+    "Category": "Geschichte",
+    "Title": "Die Bedeutung der Industriellen Revolution für die moderne Welt",
+    "Date": "2024-02-25",
+    "Tags": ["Industrielle Revolution", "Geschichte", "Technologie"]
+  },
+  {
+    "Category": "Gesundheit",
+    "Title": "Die Rolle von Yoga bei der Stressbewältigung und Entspannung",
+    "Date": "2024-02-22",
+    "Tags": ["Yoga", "Stressbewältigung", "Entspannung"]
+  },
+  {
+    "Category": "Technologie",
+    "Title": "Die Auswirkungen von 5G-Technologie auf die Kommunikation und Konnektivität",
+    "Date": "2024-02-28",
+    "Tags": ["5G", "Technologie", "Kommunikation"]
+  },
+  {
+    "Category": "Politik",
+    "Title": "Die Herausforderungen der globalen Migration im 21. Jahrhundert",
+    "Date": "2024-02-26",
+    "Tags": ["Migration", "Politik", "Globale Herausforderungen"]
+  },
+  {
+    "Category": "Kunst und Kultur",
+    "Title": "Die Renaissance der analogen Fotografie in der digitalen Ära",
+    "Date": "2024-02-23",
+    "Tags": ["Analoge Fotografie", "Renaissance", "Kunst"]
+  },
+  {
+    "Category": "Geschichte",
+    "Title": "Die Entwicklung der Demokratie: Von der Antike bis zur Gegenwart",
+    "Date": "2024-02-24",
+    "Tags": ["Demokratie", "Geschichte", "Politik"]
+  },
+  {
+    "Category": "Gesundheit",
+    "Title": "Die Bedeutung von Vitamin D für die Gesundheit und das Immunsystem",
+    "Date": "2024-02-27",
+    "Tags": ["Vitamin D", "Gesundheit", "Immunsystem"]
+  },
+  {
+    "Category": "Technologie",
+    "Title": "Die Zukunft der Elektromobilität: Nachhaltige Fortbewegung",
+    "Date": "2024-03-01",
+    "Tags": ["Elektromobilität", "Nachhaltigkeit", "Technologie"]
+  },
+  {
+    "Category": "Politik",
+    "Title": "Die Rolle von NGOs bei der Förderung der Menschenrechte weltweit",
+    "Date": "2024-03-02",
+    "Tags": ["NGOs", "Menschenrechte", "Politik"]
+  },
+  {
+    "Category": "Kunst und Kultur",
+    "Title": "Die Fusion von Tradition und Moderne in der Architektur",
+    "Date": "2024-03-03",
+    "Tags": ["Architektur", "Tradition", "Moderne"]
+  },
+  {
+    "Category": "Geschichte",
+    "Title": "Die Auswirkungen des Kalten Krieges auf die Weltpolitik",
+    "Date": "2024-03-04",
+    "Tags": ["Kalter Krieg", "Weltpolitik", "Geschichte"]
+  },
+  {
+    "Category": "Gesundheit",
+    "Title": "Die Bedeutung von Selbstfürsorge für ein gesundes Leben",
+    "Date": "2024-03-05",
+    "Tags": ["Selbstfürsorge", "Gesundheit", "Lebensstil"]
+  },
+  {
+    "Category": "Technologie",
+    "Title": "Die Ära des Internet of Things: Vernetzte Zukunft",
+    "Date": "2024-03-06",
+    "Tags": ["Internet der Dinge", "IoT", "Technologie"]
+  },
+  {
+    "Category": "Politik",
+    "Title": "Die Zukunft der internationalen Zusammenarbeit in einer globalisierten Welt",
+    "Date": "2024-03-07",
+    "Tags": ["Internationale Zusammenarbeit", "Globalisierung", "Politik"]
+  },
+  {
+    "Category": "Kunst und Kultur",
+    "Title": "Die Vielfalt des Weltkinos: Einblicke in verschiedene Filmkulturen",
+    "Date": "2024-03-08",
+    "Tags": ["Weltkino", "Filmkultur", "Vielfalt"]
+  },
+  {
+    "Category": "Geschichte",
+    "Title": "Die Renaissance: Eine Blütezeit von Kunst, Wissenschaft und Kultur",
+    "Date": "2024-03-09",
+    "Tags": ["Renaissance", "Kunst", "Kultur"]
+  },
+  {
+    "Category": "Gesundheit",
+    "Title": "Die Auswirkungen von Stress auf die körperliche und mentale Gesundheit",
+    "Date": "2024-03-10",
+    "Tags": ["Stress", "Gesundheit", "Wellness"]
+  },
+  {
+    "Category": "Technologie",
+    "Title": "Die Revolution der erneuerbaren Energien: Eine nachhaltige Zukunft",
+    "Date": "2024-03-11",
+    "Tags": ["Erneuerbare Energien", "Nachhaltigkeit", "Technologie"]
+  },
+  {
+    "Category": "Politik",
+    "Title": "Die Rolle der UNO bei der Bewältigung globaler Herausforderungen",
+    "Date": "2024-03-12",
+    "Tags": ["UNO", "Globale Herausforderungen", "Politik"]
+  },
+  {
+    "Category": "Kunst und Kultur",
+    "Title": "Die Wiederentdeckung vergessener Kunstschätze: Kulturelle Revitalisierung",
+    "Date": "2024-03-13",
+    "Tags": ["Kunstschätze", "Kultur", "Revitalisierung"]
+  },
+  {
+    "Category": "Geschichte",
+    "Title": "Die Bedeutung der Französischen Revolution für die Moderne",
+    "Date": "2024-03-14",
+    "Tags": ["Französische Revolution", "Moderne", "Geschichte"]
+  },
+  {
+    "Category": "Gesundheit",
+    "Title": "Die Vorteile von regelmäßiger körperlicher Aktivität für die Gesundheit",
+    "Date": "2024-03-15",
+    "Tags": ["Körperliche Aktivität", "Gesundheit", "Fitness"]
   }
 ]
