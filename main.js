@@ -18,6 +18,7 @@ function createWindow() {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
             enableRemoteModule: false,
+            webviewTag: true
         },    
 
 
@@ -43,7 +44,7 @@ ipcMain.on("messageChannel", (event, message) => {
     event.reply("replyChannel", "Received your message!");
   });
 
-const dataPath = path.join(__dirname, 'data.json');
+const dataPath = path.join(__dirname, 'view1/data.json');
   fs.readFile(dataPath, (err, data) => {
     if (err) throw err;
     // Senden der Daten an den Renderer-Prozess

@@ -3,33 +3,35 @@
 <head>
   <meta charset="utf-8">
   <title>Lesezeichenverwaltung</title>
-  <link href="style.css" rel="stylesheet" />
   <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
-  <h1>Lesezeichenverwaltung:</h1>
-  <table id="example" class="display" style="width:100%">
-    <thead>
-        <tr>
-            <th>Category</th>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Tags</th>
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <th>Category</th>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Tags</th>
-        </tr>
-    </tfoot>
-</table>
-<button id="sendButton">Klick mich</button>
+    <!-- https://www.npmjs.com/package/electron-tabs -->
+    <tab-group sortable="true"></tab-group>
+    <script src="node_modules/electron-tabs/dist/electron-tabs.js"></script>
+    <script>
+        // Add default tabs
+        const tabGroup = document.querySelector("tab-group");
+        
+        const tab1 = tabGroup.addTab({
+            title: "Alle Lesezeichen",
+            src: "view1/view1.html",
+            active: true,
+            closable: false
+        });
 
-<script src="renderer.js"></script>
+        const tab2 = tabGroup.addTab({
+            title: "Zweite Ansicht",
+            src: "view2/view2.html",
+            closable: false
+        });
+
+        const tab3 = tabGroup.addTab({
+            title: "Zeit",
+            src: "https://www.zeit.de/index"
+        });
+  </script>
 </body>
 </html>
