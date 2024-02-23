@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "datatables.net": "^1.13.8",
+        "electron-tabs": "^1.0.4",
         "jquery": "^3.7.1"
     }
 }
