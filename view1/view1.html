@@ -13,23 +13,61 @@
   <table id="example" class="display" style="width:100%">
     <thead>
         <tr>
-            <th>Category</th>
             <th>Title</th>
-            <th>Date</th>
+            <th>Author</th>
             <th>Tags</th>
+            <th>Category</th>
+            <th>Added at</th>
+            <th>URL</th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <th>Category</th>
             <th>Title</th>
-            <th>Date</th>
+            <th>Author</th>
             <th>Tags</th>
+            <th>Category</th>
+            <th>Added at</th>
+            <th>URL</th>
         </tr>
     </tfoot>
 </table>
-<button id="sendButton">Klick mich</button>
+<script>
+    fetch('bookmarks.json')
+    .then(response => response.json())
+    .then(data => {
+      // Initialisierung von DataTables, sobald die Daten geladen sind
+      $('#example').DataTable({
+        data: data, // Verwenden der geladenen Daten
+        columns: [
+            { title: 'Title', data: 'title' },
+            { title: 'Author', data: 'author' },
+            { title: 'Tags', data: 'tags' },
+            { title: 'Category', data: 'category' },
+            { title: 'Added at', data: 'addedAt' },
+            { title: 'URL', data: 'url' }
+            
+        ],
+        initComplete: function () {
+          this.api().columns().every(function () {
+            let column = this;
+            let title = column.footer().textContent;
+  
+            let input = document.createElement('input');
+            input.placeholder = title;
+            column.footer().replaceChildren(input);
+  
+            input.addEventListener('keyup', function () {
+              if (column.search() !== this.value) {
+                column.search(this.value).draw();
+              }
+            });
+          });
+        }
+      });
+    })
+    .catch(error => console.error('Fehler beim Laden der JSON-Daten:', error));</script>
 
-<script src="renderer.js"></script>
+<script src="renderer_view1.js"></script>
 </body>
 </html>

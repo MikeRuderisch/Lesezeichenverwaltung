@@ -1,0 +1,314 @@
+[
+    {
+        "title": "GitHub - casualsnek/cassowary: Run Windows Applications on Linux as if they are native, Use linux applications to launch files files located in windows vm without needing to install applications on...",
+        "author": "casualsnek",
+        "tags": "Hacking/Windows",
+        "category":"Hacking",
+        "addedAt": 1645308380.83454,
+        "url": "https://github.com/casualsnek/cassowary"
+    },
+    {
+        "title": "GitHub - Bycelium/PyFlow: An open-source tool for visual and modular block programming in python",
+        "author": "Bycelium",
+        "tags": "Python/Visualization",
+        "category":"Python",
+        "addedAt": 1645308605.962537,
+        "url": "https://github.com/Bycelium/PyFlow"
+    },
+    {
+        "title": "GitHub - pysemtec/semantic-python-overview: (subjective) overview of projects which are related both to python and semantic technologies (RDF, OWL, Reasoning, ...)",
+        "author": "cknoll",
+        "tags": "Python/Semantics Teaching",
+        "category":"Python",
+        "addedAt": 1645308545.716978,
+        "url": "https://github.com/pysemtec/semantic-python-overview"
+    },
+    {
+        "title": "Single-file PHP file manager, browser and photo gallery | Files",
+        "author": null,
+        "tags": "PHP/file-manager",
+        "category":"PHP",
+        "addedAt": 1645308180.873639,
+        "url": "https://www.files.gallery/"
+    },
+    {
+        "title": "Datawrapper: Create charts, maps, and tables",
+        "author": "Rani Molla                             Senior Data Reporter at Recode",
+        "tags": "Visualization/Tables",
+        "category":"Visualization",
+        "addedAt": 1645308261.626903,
+        "url": "https://www.datawrapper.de/"
+    },
+    {
+        "title": "Photoview",
+        "author": null,
+        "tags": "Visualization/Photos",
+        "category":"Visualization",
+        "addedAt": 1645308160.918944,
+        "url": "https://photoview.github.io/"
+    },
+    {
+        "title": "GitHub - Yetangitu/Spodcast: Spodcast is a caching Spotify podcast to RSS proxy. Using Spodcast you can follow Spotify-hosted netcasts/podcasts using any player which supports RSS, thus enabling th...",
+        "author": "Yetangitu",
+        "tags": "Hacking/Spotify",
+        "category":"Hacking",
+        "addedAt": 1645307758.4306622,
+        "url": "https://github.com/Yetangitu/Spodcast"
+    },
+    {
+        "title": "GitHub - ObuchiYuki/DevToysMac: DevToys For mac",
+        "author": "ObuchiYuki",
+        "tags": "Hacking/OSX",
+        "category":"Hacking",
+        "addedAt": 1645308027.253213,
+        "url": "https://github.com/ObuchiYuki/DevToysMac"
+    },
+    {
+        "title": "gTool",
+        "author": "CHIP Redaktion",
+        "tags": "Hacking/Gigaset",
+        "category":"Hacking",
+        "addedAt": 1645348689.6166859,
+        "url": "https://www.chip.de/downloads/gTool_161588436.html"
+    },
+    {
+        "title": "Gmail Hotkeys for Outlook",
+        "author": "jmbeach",
+        "tags": "Hacking/OSX",
+        "category":"Hacking",
+        "addedAt": 1645348631.052843,
+        "url": "https://gist.github.com/jmbeach/2a8616a638fa9a960e454936d30ebc4a"
+    },
+    {
+        "title": "What is Fuse.js? | Fuse.js",
+        "author": null,
+        "tags": "Hacking/Seach",
+        "category":"Hacking",
+        "addedAt": 1645348292.221436,
+        "url": "https://fusejs.io/"
+    },
+    {
+        "title": "Outlining Your Notes with Org :: Sacha Chua",
+        "author": null,
+        "tags": "Hacking/Formatting",
+        "category":"Hacking",
+        "addedAt": 1645348439.429316,
+        "url": "https://sachachua.com/blog/2008/01/outlining-your-notes-with-org/"
+    },
+    {
+        "title": "AQUA DOME Tirol Therme L\u00e4ngenfeld: Tickets",
+        "author": null,
+        "tags": "Urlaub",
+        "category":"Urlaub",
+        "addedAt": 1645348155.03506,
+        "url": "https://shop.aqua-dome.at/tickets/category/"
+    },
+    {
+        "title": "GitHub - Praqma/file-pattern-scanner: Simple script that scans flat/plain text files for patterns predefined in rules",
+        "author": "praqma-thi",
+        "tags": "Hacking/Seach",
+        "category":"Hacking",
+        "addedAt": 1645347611.846105,
+        "url": "https://github.com/Praqma/file-pattern-scanner"
+    },
+    {
+        "title": "outlook-taskboard/app.js at master \u00b7 evrenvarol/outlook-taskboard",
+        "author": "evrenvarol",
+        "tags": "Hacking/Outlook",
+        "category":"Hacking",
+        "addedAt": 1645347562.315853,
+        "url": "https://github.com/evrenvarol/outlook-taskboard"
+    },
+    {
+        "title": "GitHub - rc2dev/fyodor: Convert your Amazon Kindle highlights and notes into markdown (or any format).",
+        "author": "rc2dev",
+        "tags": "Hacking/Kindle",
+        "category":"Hacking",
+        "addedAt": 1645347514.393615,
+        "url": "https://github.com/rc2dev/fyodor"
+    },
+    {
+        "title": "Inside look at modern web browser (part 3) \u00a0|\u00a0 Web \u00a0|\u00a0 Google Developers",
+        "author": null,
+        "tags": "Teaching/DOM",
+        "category":"Teaching",
+        "addedAt": 1645347213.7597919,
+        "url": "https://developers.google.com/web/updates/2018/09/inside-browser-part3"
+    },
+    {
+        "title": "Tandoor Recipes",
+        "author": "vabene1111",
+        "tags": "Software/Recipe",
+        "category":"Software",
+        "addedAt": 1645348211.186634,
+        "url": "https://docs.tandoor.dev/"
+    },
+    {
+        "title": "2.0.0 Migration Guide \u2014 google-cloud-language documentation",
+        "author": null,
+        "tags": "GCP",
+        "category":"GCP",
+        "addedAt": 1645371208.806217,
+        "url": "https://googleapis.dev/python/language/latest/UPGRADING.html?highlight=enums"
+    },
+    {
+        "title": "omareldeeb/tum-moodle-downloader: A python-built web crawler to automate file downloads off of https://www.moodle.tum.de/",
+        "author": "omareldeeb",
+        "tags": "Python/Webcrawler",
+        "category":"Python",
+        "addedAt": 1645371266.2252169,
+        "url": "https://github.com/omareldeeb/tum-moodle-downloader"
+    },
+    {
+        "title": "GitHub - jorisschellekens/borb: borb is a library for reading, creating and manipulating PDF files in python.",
+        "author": "jorisschellekens",
+        "tags": "Python/PDF",
+        "category":"Python",
+        "addedAt": 1645372361.3773952,
+        "url": "https://github.com/jorisschellekens/borb"
+    },
+    {
+        "title": "r/shortcuts - passing multiple variables to a Shorcut",
+        "author": null,
+        "tags": "Hacking/Shortcuts",
+        "category":"Python",
+        "addedAt": 1645373330.1179252,
+        "url": "https://www.reddit.com/r/shortcuts/comments/cdcela/passing_multiple_variables_to_a_shorcut/"
+    },
+    {
+        "title": "Firefox bookmarklet for Goodlinks? - Tech Support - MPU Talk",
+        "author": null,
+        "tags": "Hacking/Shortcuts",
+        "category":"Hacking",
+        "addedAt": 1645373337.088602,
+        "url": "https://talk.macpowerusers.com/t/firefox-bookmarklet-for-goodlinks/19573"
+    },
+    {
+        "title": "GitHub - sql-js/sql.js: A javascript library to run SQLite on the web.",
+        "author": "sql-js",
+        "tags": "Hacking/SQLite",
+        "category":"Hacking",
+        "addedAt": 1645373358.929682,
+        "url": "https://github.com/sql-js/sql.js"
+    },
+    {
+        "title": "How do I run apple script on a particular instance of Firefox?",
+        "author": "CauderCauder                      12488 bronze badges",
+        "tags": "Hacking/Applescript",
+        "category":"Hacking",
+        "addedAt": 1645373959.6203542,
+        "url": "https://apple.stackexchange.com/questions/395951/how-do-i-run-apple-script-on-a-particular-instance-of-firefox"
+    },
+    {
+        "title": "goodlinks/goodlinks.py at main \u00b7 cychong47/goodlinks",
+        "author": "cychong47",
+        "tags": "Hacking/Applescript",
+        "category":"Hacking",
+        "addedAt": 1645431042.87556,
+        "url": "https://github.com/cychong47/goodlinks/blob/main/goodlinks.py"
+    },
+    {
+        "title": "GitHub - jarun/buku: Personal mini-web in text",
+        "author": "jarun",
+        "tags": "Hacking/Bookmarkmanager",
+        "category":"Hacking",
+        "addedAt": 1645431109.031973,
+        "url": "https://github.com/jarun/buku"
+    },
+    {
+        "title": "Fred's ImageMagick Scripts",
+        "author": "Fred Weinhaus",
+        "tags": "Hacking/Imagemagic",
+        "category":"Hacking",
+        "addedAt": 1645432134.141413,
+        "url": "http://www.fmwconcepts.com/imagemagick/index.php"
+    },
+    {
+        "title": "So verwenden Sie launchd zum Ausf\u00fchren von Skripts nach Zeitplan in macOS",
+        "author": "Moyens Staff",
+        "tags": "Hacking/OSX",
+        "category":"Hacking",
+        "addedAt": 1645433776.5716748,
+        "url": "https://de.moyens.net/mac-os/so-verwenden-sie-launchd-zum-ausfuehren-von-skripts-nach-zeitplan-in-macos/"
+    },
+    {
+        "title": "How can I make auto-hide/show for the dock faster?",
+        "author": "gentmatt",
+        "tags": "Hacking/OSX",
+        "category":"Hacking",
+        "addedAt": 1645434601.643518,
+        "url": "https://apple.stackexchange.com/questions/33600/how-can-i-make-auto-hide-show-for-the-dock-faster"
+    },
+    {
+        "title": "Programmable Keyboard for Less and Windows UI Automation",
+        "author": "Leo Sutic",
+        "tags": "Hacking/Keyboard",
+        "category":"Hacking",
+        "addedAt": 1645973363.530548,
+        "url": "https://monochrome.sutic.nu/2021/10/30/programmable-keyboard-for-less-and-windows-ui-automation.html"
+    },
+    {
+        "title": "GitHub - RhetTbull/osxphotos: Python app to export pictures and associated metadata from Apple Photos on macOS. Also includes a package to provide programmatic access to the Photos library, picture...",
+        "author": "RhetTbull",
+        "tags": "Hacking/OSX/Photos",
+        "category":"Hacking",
+        "addedAt": 1645874564.583486,
+        "url": "https://github.com/RhetTbull/osxphotos"
+    },
+    {
+        "title": "Smart Home: So finden Sie das passende Funksystem",
+        "author": "Patrick Bellmer",
+        "tags": "SmartHome/Funksystem",
+        "category":"Hacking",
+        "addedAt": 1648644362.963577,
+        "url": "https://www.heise.de/ratgeber/Smart-Home-So-finden-Sie-das-passende-Funksystem-6072139.html?seite=all"
+    },
+    {
+        "title": "GitHub - metarank/metarank: A low code Machine Learning tool that personalizes product listings, articles, recommendations, and search results in order to boost sales. A friendly Learn-to-Rank engine",
+        "author": "metarank",
+        "tags": "Hacking/Ranking",
+        "category":"Hacking",
+        "addedAt": 1648331282.174829,
+        "url": "https://github.com/metarank/metarank"
+    },
+    {
+        "title": "GitHub - frenck/awesome-home-assistant: A curated list of amazingly awesome Home Assistant resources.",
+        "author": "dependabot[bot]",
+        "tags": "SmartHome/HomeAssistant",
+        "category":"SmartHome",
+        "addedAt": 1648921316.9407291,
+        "url": "https://github.com/frenck/awesome-home-assistant"
+    },
+    {
+        "title": "All* my macOS keyboard shortcuts - jamieonkeys",
+        "author": null,
+        "tags": "Hacking/OSX",
+        "category":"Hacking",
+        "addedAt": 1648930135.4109359,
+        "url": "https://www.jamieonkeys.dev/posts/keyboard-shortcuts/"
+    },
+    {
+        "title": "Extracting web page content using Readability.js and shot-scraper",
+        "author": null,
+        "tags": "Hacking/WebScraping",
+        "category":"Hacking",
+        "addedAt": 1648930700.692584,
+        "url": "https://til.simonwillison.net/shot-scraper/readability"
+    },
+    {
+        "title": "GitHub - tldr-devops/startpack: Selfhosted tech starter pack for development of new project or startup",
+        "author": "Friz-zy",
+        "tags": "Hacking/Self-Hosted",
+        "category":"Hacking",
+        "addedAt": 1648977562.650309,
+        "url": "https://github.com/tldr-devops/startpack"
+    },
+    {
+        "title": "gist:d3c4483b229de70760d5",
+        "author": null,
+        "tags": "Hacking/Autohotkey",
+        "category":"Hacking",
+        "addedAt": 1649092582.261664,
+        "url": "https://gist.github.com/hi5/d3c4483b229de70760d5"
+    }
+]
