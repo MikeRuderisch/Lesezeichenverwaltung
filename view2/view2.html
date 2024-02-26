@@ -1,17 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>Lesezeichenverwaltung</title>
-  <link href="style.css" rel="stylesheet" />
-  <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet" />
-  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <title>jsTree test</title>
+  <!-- 2 load the theme CSS file -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="dist/themes/default/style.min.css" />
 </head>
 <body>
+  <h1>Vollständige Artikel:</h1>
+  <button>Reset</button>
+  </br>
+  <div class="wrapper">
+  <div class="inline" id="tree">
+  <!-- 3 setup a container element -->
+    <div id="jstree">
+      <!-- in this example the tree is populated from inline HTML -->
+      <ul>
+        <li>Root node 1
+          <ul>
+            <li id="child_node_1">Child node 1</li>
+            <li>Child node 2</li>
+          </ul>
+        </li>
+        <li>Root node 2</li>
+      </ul>
+    </div>
+  </div>
+    <div class="inline" id="table">
+      <table>
+        <tr>
+          <th>Company</th>
+          <th>Contact</th>
+          <th>Country</th>
+        </tr>
+        <tr>
+          <td>Alfreds Futterkiste</td>
+          <td>Maria Anders</td>
+          <td>Germany</td>
+        </tr>
+        <tr>
+          <td>Centro comercial Moctezuma</td>
+          <td>Francisco Chang</td>
+          <td>Mexico</td>
+        </tr>
+        <tr>
+          <td>Ernst Handel</td>
+          <td>Roland Mendel</td>
+          <td>Austria</td>
+        </tr>
+        <tr>
+          <td>Island Trading</td>
+          <td>Helen Bennett</td>
+          <td>UK</td>
+        </tr>
+        <tr>
+          <td>Laughing Bacchus Winecellars</td>
+          <td>Yoshi Tannamuri</td>
+          <td>Canada</td>
+        </tr>
+        <tr>
+          <td>Magazzini Alimentari Riuniti</td>
+          <td>Giovanni Rovelli</td>
+          <td>Italy</td>
+        </tr>
+      </table>
+    </div>
+    <div class="inline" id="category">
+      <button class="tablebutton">Kategorie 1</button></br>
+      <button class="tablebutton">Kategorie 2</button></br>
+      <button class="tablebutton">Kategorie 3</button></br>
+      <button class="tablebutton">Kategorie 4</button></br>
+    </div>
+  </div>
 
-
-  <h1>Lesezeichenverwaltung:</h1>
-  
+  <!-- 4 include the jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- 5 include the minified jstree source -->
+  <script src="dist/jstree.min.js"></script>
+  <script>
+  $(function () {
+    // 6 create an instance when the DOM is ready
+    $('#jstree').jstree();
+    // 7 bind to events triggered on the tree
+    $('#jstree').on("changed.jstree", function (e, data) {
+      console.log(data.selected);
+    });
+    // 8 interact with the tree - either way is OK
+    $('button').on('click', function () {
+      $('#jstree').jstree(true).select_node('child_node_1');
+      $('#jstree').jstree('select_node', 'child_node_1');
+      $.jstree.reference('#jstree').select_node('child_node_1');
+    });
+  });
+  </script>
 </body>
 </html>
