@@ -45,7 +45,7 @@ ipcMain.on("messageChannel", (event, message) => {
   });
 
 
-const dataPath = path.join(__dirname, 'view1/bookmarks.json');
+/*const dataPath = path.join(__dirname, 'view1/bookmarks.json');
   fs.readFile(dataPath, (err, data) => {
     if (err) throw err;
     // Senden der Daten an den Renderer-Prozess
@@ -55,5 +55,5 @@ const dataPath = path.join(__dirname, 'view1/bookmarks.json');
     window.webContents.send('data', JSON.parse(data));
     });
   });
-
+*/
 app.on("ready", createWindow);

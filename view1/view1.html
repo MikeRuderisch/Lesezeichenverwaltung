@@ -20,6 +20,14 @@
             <th>Added at</th>
             <th>URL</th>
         </tr>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Tags</th>
+            <th>Category</th>
+            <th>Added at</th>
+            <th>URL</th>
+        </tr>
     </thead>
     <tfoot>
         <tr>
@@ -31,57 +39,57 @@
             <th>URL</th>
         </tr>
     </tfoot>
-</table>
-<script>
-  fetch('bookmarks.json')
-  .then(response => response.json())
-  .then(data => {
-      // Konvertiere Unix-Timestamps in lesbare Datumsformate
-      const convertedData = data.map(item => ({
-          ...item,
-          addedAt: new Date(item.addedAt * 1000).toLocaleString('de-DE', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit'
-          })
-      }));
+  </table>
+  <script>
+    fetch('bookmarks.json')
+    .then(response => response.json())
+    .then(data => {
+        // Konvertiere Unix-Timestamps in lesbare Datumsformate
+        const convertedData = data.map(item => ({
+            ...item,
+            addedAt: new Date(item.addedAt * 1000).toLocaleString('de-DE', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            })
+        }));
 
-      // Initialisierung von DataTables, nachdem die Daten konvertiert wurden
-      $('#example').DataTable({
-          data: convertedData, // Verwenden der konvertierten Daten
-          columns: [
-              { title: 'Title', data: 'title' },
-              { title: 'Author', data: 'author' },
-              { title: 'Tags', data: 'tags' },
-              { title: 'Category', data: 'category' },
-              { title: 'Added at', data: 'addedAt' },
-              { title: 'URL', data: 'url' }
-          ],
-          initComplete: function () {
-              this.api().columns().every(function () {
-                  let column = this;
-                  let title = column.footer().textContent;
+        // Initialisierung von DataTables, nachdem die Daten konvertiert wurden
+        $('#example').DataTable({
+            data: convertedData, // Verwenden der konvertierten Daten
+            columns: [
+                { title: 'Title', data: 'title' },
+                { title: 'Author', data: 'author' },
+                { title: 'Tags', data: 'tags' },
+                { title: 'Category', data: 'category' },
+                { title: 'Added at', data: 'addedAt' },
+                { title: 'URL', data: 'url' }
+            ],
+            pageLength: -1, // Zeigt alle Einträge an
+            lengthMenu: [[-1], ['All']], // Menüoption, um alle Einträge anzuzeigen
+            dom: 'rti', // Entfernt das Dropdown-Menü
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    let column = this;
+                    let title = $(column.header()).text();
 
-                  // Create input element
-                  let input = document.createElement('input');
-                  input.placeholder = title;
-                  column.footer().replaceChildren(input);
-
-                  // Event listener for user input
-                  input.addEventListener('keyup', function () {
-                      if (column.search() !== this.value) {
-                          column.search(this.value).draw();
-                      }
-                  });
-              });
-          }
-      });
-  })
-  .catch(error => console.error('Fehler beim Laden der JSON-Daten:', error));
-</script>
-<script src="renderer_view1.js"></script>
+                    // Create input element
+                    let input = document.createElement('input');
+                    input.placeholder = title;
+                    $(input).appendTo($(column.header()).empty()).on('keyup change', function () {
+                        if (column.search() !== this.value) {
+                            column.search(this.value).draw();
+                        }
+                    });
+                });
+            }
+        });
+    })
+    .catch(error => console.error('Fehler beim Laden der JSON-Daten:', error));
+  </script>
+  <script src="renderer_view1.js"></script>
 </body>
 </html>
