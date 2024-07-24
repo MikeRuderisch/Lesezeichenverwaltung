@@ -30,6 +30,7 @@ table, td, th {
     border-right: 2px solid black;
     border-top: 2px solid black;
     width: 10%;
+    flex-grow: 1;
 }
 
 table {
@@ -49,11 +50,14 @@ tr:nth-child(even) {
 }
 
 div.inline { 
-    resize:horizontal; 
     overflow:scroll; 
     height: 550px;
     display:inline-block;
-    margin-right:-4px
+    margin-right:-4px;
+}
+
+div.resizeable {
+    resize:horizontal; 
 }
 
 button.tablebutton { 
@@ -62,5 +66,6 @@ button.tablebutton {
 }   
 
 .wrapper{
-    white-space:nowrap;
+    display: flex;
+    width: 100%;
 }
