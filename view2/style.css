@@ -9,7 +9,6 @@ table, td, th {
     overflow:hidden;
     white-space: nowrap;
     text-overflow: hidden;
-    resize:horizontal;
 }
 
 #tree {
