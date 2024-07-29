@@ -29,16 +29,6 @@
             <th>URL</th>
         </tr>
     </thead>
-    <tfoot>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Tags</th>
-            <th>Category</th>
-            <th>Added at</th>
-            <th>URL</th>
-        </tr>
-    </tfoot>
   </table>
   <script>
     fetch('bookmarks.json')
@@ -61,7 +51,13 @@
         $('#example').DataTable({
             data: convertedData, // Verwenden der konvertierten Daten
             columns: [
-                { title: 'Title', data: 'title' },
+            { 
+                title: 'Title', 
+                data: 'title',
+                render: function (data, type, row) {
+                    return '<a href="' + row.url + '" target="_blank">' + data + '</a>';
+                }
+            },
                 { title: 'Author', data: 'author' },
                 { title: 'Tags', data: 'tags' },
                 { title: 'Category', data: 'category' },
@@ -70,7 +66,7 @@
             ],
             pageLength: -1, // Zeigt alle Einträge an
             lengthMenu: [[-1], ['All']], // Menüoption, um alle Einträge anzuzeigen
-            dom: 'rti', // Entfernt das Dropdown-Menü
+            dom: 'frti', // Entfernt das Dropdown-Menü
             initComplete: function () {
                 this.api().columns().every(function () {
                     let column = this;
