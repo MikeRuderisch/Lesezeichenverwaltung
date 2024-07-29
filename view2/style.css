@@ -5,7 +5,6 @@ tfoot input {
 }
 
 table, td, th {
-    /*table-layout:fixed;*/
     overflow:hidden;
     white-space: nowrap;
     text-overflow: hidden;
