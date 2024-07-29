@@ -5,6 +5,7 @@ $(function () {
     const categories = new Set();
     const treeData = [];
     const tableData = [];
+    let fuse;
 
     data.forEach((item) => {
       // Build jsTree data structure
@@ -79,6 +80,32 @@ $(function () {
         const isVisible = rowTag.some(tag => selectedNodes.includes(tag));
         $(this).toggle(isVisible);
       });
+    });
+
+    // Initialize Fuse.js
+    fuse = new Fuse(data, {
+      keys: ['contents', 'title', 'url', 'created_at'],
+      threshold: 0.4
+    });
+
+    // Search functionality
+    $('#search').on('input', function() {
+      const searchTerm = $(this).val();
+      if (searchTerm) {
+        const result = fuse.search(searchTerm);
+        const filteredTableData = result.map(({ item }) => {
+          return `
+            <tr data-tag="${item.tag}">
+              <td>${item.contents || item.content || ''}</td>
+              <td>${item.title || ''}</td>
+              <td>${item.url || ''}</td>
+              <td>${item.created_at || item.date || ''}</td>
+            </tr>`;
+        });
+        $('table tbody').html(filteredTableData.join(''));
+      } else {
+        $('table tbody').html(tableData.join(''));
+      }
     });
   });
 });
