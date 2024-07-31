@@ -19,14 +19,7 @@
             <th>Category</th>
             <th>Added at</th>
             <th>URL</th>
-        </tr>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Tags</th>
-            <th>Category</th>
-            <th>Added at</th>
-            <th>URL</th>
+            <th>Action</th>
         </tr>
     </thead>
   </table>
@@ -34,7 +27,6 @@
     fetch('bookmarks.json')
     .then(response => response.json())
     .then(data => {
-        // Konvertiere Unix-Timestamps in lesbare Datumsformate
         const convertedData = data.map(item => ({
             ...item,
             addedAt: new Date(item.addedAt * 1000).toLocaleString('de-DE', {
@@ -44,35 +36,29 @@
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
-            })
+            }),
+            action: '<button class="open-tab-button">Open Tab</button>'
         }));
 
-        // Initialisierung von DataTables, nachdem die Daten konvertiert wurden
         $('#example').DataTable({
-            data: convertedData, // Verwenden der konvertierten Daten
+            data: convertedData,
             columns: [
-            { 
-                title: 'Title', 
-                data: 'title',
-                render: function (data, type, row) {
-                    return '<a href="' + row.url + '" target="_blank">' + data + '</a>';
-                }
-            },
-                { title: 'Author', data: 'author' },
-                { title: 'Tags', data: 'tags' },
                 { title: 'Category', data: 'category' },
+                { title: 'Title', data: 'title' },
+                { title: 'Author', data: 'author' },
                 { title: 'Added at', data: 'addedAt' },
-                { title: 'URL', data: 'url' }
+                { title: 'URL', data: 'url' },
+                { title: 'Tags', data: 'tags' },
+                { title: 'Action', data: 'action' }
             ],
-            pageLength: -1, // Zeigt alle Einträge an
-            lengthMenu: [[-1], ['All']], // Menüoption, um alle Einträge anzuzeigen
-            dom: 'frti', // Entfernt das Dropdown-Menü
+            pageLength: -1,
+            lengthMenu: [[-1], ['All']],
+            dom: 'frti',
             initComplete: function () {
                 this.api().columns().every(function () {
                     let column = this;
                     let title = $(column.header()).text();
 
-                    // Create input element
                     let input = document.createElement('input');
                     input.placeholder = title;
                     $(input).appendTo($(column.header()).empty()).on('keyup change', function () {
@@ -86,6 +72,5 @@
     })
     .catch(error => console.error('Fehler beim Laden der JSON-Daten:', error));
   </script>
-  <script src="renderer_view1.js"></script>
 </body>
 </html>
