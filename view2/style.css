@@ -5,11 +5,9 @@ tfoot input {
 }
 
 table, td, th {
-    /*table-layout:fixed;*/
     overflow:hidden;
     white-space: nowrap;
     text-overflow: hidden;
-    resize:horizontal;
 }
 
 #tree {
@@ -30,6 +28,7 @@ table, td, th {
     border-right: 2px solid black;
     border-top: 2px solid black;
     width: 10%;
+    flex-grow: 1;
 }
 
 table {
@@ -49,18 +48,29 @@ tr:nth-child(even) {
 }
 
 div.inline { 
-    resize:horizontal; 
     overflow:scroll; 
     height: 550px;
     display:inline-block;
-    margin-right:-4px
+    margin-right:-4px;
+}
+
+div.resizeable {
+    resize:horizontal; 
 }
 
 button.tablebutton { 
     width: 100%;
     height: 50px;
+    background-color: #36A9AE;
+    background-image: linear-gradient(#37ADB2, #329CA0);
+    border: 1px solid #2A8387;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+    color:#ffffff;
+    margin-top: 5px;
 }   
 
 .wrapper{
-    white-space:nowrap;
+    display: flex;
+    width: 100%;
 }
