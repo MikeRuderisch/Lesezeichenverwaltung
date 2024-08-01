@@ -27,9 +27,9 @@ $(function () {
       const tableRow = `
         <tr data-tag="${item.tag}">
           <td>${item.contents || item.content || ''}</td>
-          <td>${item.title || ''}</td>
-          <td>${item.url || ''}</td>
-          <td>${item.created_at || item.date || ''}</td>
+          <td style="display:none;">${item.title || ''}</td>
+          <td style="display:none;">${item.url || ''}</td>
+          <td style="display:none;">${item.created_at || item.date || ''}</td>
         </tr>`;
       tableData.push(tableRow);
     });

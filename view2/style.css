@@ -20,14 +20,14 @@ table, td, th {
 #table {
     border-top: 2px solid black;
     border-bottom: 2px solid black;
-    width: 60%;
+    width: 64%;
 }
 
 #category {
     border-bottom: 2px solid black;
     border-right: 2px solid black;
     border-top: 2px solid black;
-    width: 10%;
+    width: 6%;
     flex-grow: 1;
 }
 
@@ -41,6 +41,7 @@ td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
+    word-wrap:break-word;
 }
   
 tr:nth-child(even) {
