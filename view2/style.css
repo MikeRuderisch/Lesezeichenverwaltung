@@ -4,12 +4,6 @@ tfoot input {
     box-sizing: border-box;
 }
 
-table, td, th {
-    overflow:hidden;
-    white-space: nowrap;
-    text-overflow: hidden;
-}
-
 #tree {
     border-bottom: 2px solid black;
     border-left: 2px solid black;
@@ -20,28 +14,31 @@ table, td, th {
 #table {
     border-top: 2px solid black;
     border-bottom: 2px solid black;
-    width: 64%;
+    width: 70%;
 }
 
 #category {
     border-bottom: 2px solid black;
     border-right: 2px solid black;
     border-top: 2px solid black;
-    width: 6%;
+    width: 10%;
     flex-grow: 1;
 }
 
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 100%;
+    table-layout: fixed; 
+    width: 100%; 
+    word-wrap: break-word;
+    height: 100%;
 }
   
 td, th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
-    word-wrap:break-word;
+    word-wrap: break-word;
 }
   
 tr:nth-child(even) {
