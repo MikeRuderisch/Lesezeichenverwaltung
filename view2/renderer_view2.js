@@ -7,7 +7,22 @@ $(function () {
     const tableData = [];
     let fuse;
 
-    data.forEach((item) => {
+    // Function to remove HTML tags
+    function stripHTML(html) {
+      var doc = new DOMParser().parseFromString(html, 'text/html');
+      return doc.body.textContent || "";
+    }
+
+    // Prepare data for Fuse.js by stripping HTML from content
+    const fuseData = data.map(item => {
+      return {
+        ...item,
+        searchContent: stripHTML(item.contents || item.content || ''),
+        originalContent: item.contents || item.content || ''
+      };
+    });
+
+    data.forEach((item, index) => {
       // Build jsTree data structure
       const tagParts = item.tag.split('/');
       let currentLevel = treeData;
@@ -26,7 +41,7 @@ $(function () {
       // Build table data
       const tableRow = `
         <tr data-tag="${item.tag}">
-          <td>${item.contents || item.content || ''}</td>
+          <td>${fuseData[index].originalContent}</td>
           <td style="display:none;">${item.title || ''}</td>
           <td style="display:none;">${item.url || ''}</td>
           <td style="display:none;">${item.created_at || item.date || ''}</td>
@@ -54,12 +69,13 @@ $(function () {
       const selectedCategory = $(this).text();
       const filteredData = data.filter(item => item.category === selectedCategory);
       const filteredTableData = filteredData.map(item => {
+        const originalContent = fuseData.find(fuseItem => fuseItem.tag === item.tag).originalContent;
         return `
           <tr data-tag="${item.tag}">
-            <td>${item.contents || item.content || ''}</td>
-            <td>${item.title || ''}</td>
-            <td>${item.url || ''}</td>
-            <td>${item.created_at || item.date || ''}</td>
+            <td>${originalContent}</td>
+            <td style="display:none;">${item.title || ''}</td>
+            <td style="display:none;">${item.url || ''}</td>
+            <td style="display:none;">${item.created_at || item.date || ''}</td>
           </tr>`;
       });
       $('table tbody').html(filteredTableData.join(''));
@@ -83,10 +99,34 @@ $(function () {
     });
 
     // Initialize Fuse.js
-    fuse = new Fuse(data, {
-      keys: ['contents', 'title', 'url', 'created_at'],
-      threshold: 0.4
+    fuse = new Fuse(fuseData, {
+      keys: ['searchContent'],
+      threshold: 1.0 // Adjust threshold as needed
     });
+
+    // Function to highlight the search term in the content
+    function highlightTerm(html, term) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT, null, false);
+      const regex = new RegExp(`(${term})`, 'gi');
+      const nodes = [];
+
+      while (walker.nextNode()) {
+        nodes.push(walker.currentNode);
+      }
+
+      nodes.forEach(node => {
+        const parent = node.parentNode;
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
+        while (tempDiv.firstChild) {
+          parent.insertBefore(tempDiv.firstChild, node);
+        }
+        parent.removeChild(node);
+      });
+
+      return doc.body.innerHTML;
+    }
 
     // Search functionality
     $('#search').on('input', function() {
@@ -94,12 +134,13 @@ $(function () {
       if (searchTerm) {
         const result = fuse.search(searchTerm);
         const filteredTableData = result.map(({ item }) => {
+          const highlightedContent = highlightTerm(item.searchContent, searchTerm);
           return `
             <tr data-tag="${item.tag}">
-              <td>${item.contents || item.content || ''}</td>
-              <td>${item.title || ''}</td>
-              <td>${item.url || ''}</td>
-              <td>${item.created_at || item.date || ''}</td>
+              <td>${highlightedContent}</td>
+              <td style="display:none;">${item.title || ''}</td>
+              <td style="display:none;">${item.url || ''}</td>
+              <td style="display:none;">${item.created_at || item.date || ''}</td>
             </tr>`;
         });
         $('table tbody').html(filteredTableData.join(''));

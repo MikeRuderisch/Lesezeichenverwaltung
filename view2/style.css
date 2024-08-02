@@ -11,6 +11,10 @@ tfoot input {
     width: 19%;
 }
 
+.highlight {
+    background-color: yellow; 
+  }
+
 #table {
     border-top: 2px solid black;
     border-bottom: 2px solid black;
