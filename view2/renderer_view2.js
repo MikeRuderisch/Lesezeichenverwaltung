@@ -56,6 +56,8 @@ $(function () {
         'data': treeData
       },
       "plugins": ["checkbox"]
+    }).on('ready.jstree', function() {
+      $(this).jstree('open_all');
     });
 
     // Populate table
@@ -79,6 +81,7 @@ $(function () {
           </tr>`;
       });
       $('table tbody').html(filteredTableData.join(''));
+      updateJsTree(filteredData);
     });
 
     // Reset button
@@ -158,9 +161,33 @@ $(function () {
             </tr>`;
         });
         $('table tbody').html(filteredTableData.join(''));
+        updateJsTree(results.map(result => data[result.ref]));
       } else {
         $('table tbody').html(tableData.join(''));
+        $('#jstree').jstree('check_all');
+        $('#jstree').jstree('open_all');
       }
     });
+
+    // Function to update jsTree based on filtered data
+    function updateJsTree(filteredData) {
+      const tags = filteredData.map(item => item.tag);
+      $('#jstree').jstree('uncheck_all');
+
+      tags.forEach(tag => {
+        const tagParts = tag.split('/');
+        let nodeId = '#';
+        tagParts.forEach(part => {
+          const node = $('#jstree').jstree('get_node', nodeId).children.find(childId => {
+            return $('#jstree').jstree('get_node', childId).text === part;
+          });
+          if (node) {
+            nodeId = node;
+          }
+        });
+        $('#jstree').jstree('check_node', nodeId);
+      });
+      $('#jstree').jstree('open_all', nodeId);
+    }
   });
 });
