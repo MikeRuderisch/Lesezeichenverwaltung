@@ -5,21 +5,22 @@ $(function () {
     const categories = new Set();
     const treeData = [];
     const tableData = [];
-    let fuse;
 
-    // Function to remove HTML tags
-    function stripHTML(html) {
-      var doc = new DOMParser().parseFromString(html, 'text/html');
-      return doc.body.textContent || "";
-    }
+    // Lunr.js index
+    const lunrIndex = lunr(function () {
+      this.ref('id');
+      this.field('title');
+      this.field('content');
+      this.field('category');
 
-    // Prepare data for Fuse.js by stripping HTML from content
-    const fuseData = data.map(item => {
-      return {
-        ...item,
-        searchContent: stripHTML(item.contents || item.content || ''),
-        originalContent: item.contents || item.content || ''
-      };
+      data.forEach(function (doc, idx) {
+        this.add({
+          id: idx,
+          title: doc.title,
+          content: doc.content,
+          category: doc.category
+        });
+      }, this);
     });
 
     data.forEach((item, index) => {
@@ -29,7 +30,7 @@ $(function () {
       tagParts.forEach((part, index) => {
         let existingNode = currentLevel.find(node => node.text === part);
         if (!existingNode) {
-          existingNode = { text: part, children: [], state: { opened: true, selected: true } }; // Ensure nodes are expanded and checked
+          existingNode = { text: part, children: [], state: { opened: true, selected: true } };
           currentLevel.push(existingNode);
         }
         currentLevel = existingNode.children;
@@ -41,7 +42,7 @@ $(function () {
       // Build table data
       const tableRow = `
         <tr data-tag="${item.tag}">
-          <td>${fuseData[index].originalContent}</td>
+          <td>${item.content}</td>
           <td style="display:none;">${item.title || ''}</td>
           <td style="display:none;">${item.url || ''}</td>
           <td style="display:none;">${item.created_at || item.date || ''}</td>
@@ -69,10 +70,9 @@ $(function () {
       const selectedCategory = $(this).text();
       const filteredData = data.filter(item => item.category === selectedCategory);
       const filteredTableData = filteredData.map(item => {
-        const originalContent = fuseData.find(fuseItem => fuseItem.tag === item.tag).originalContent;
         return `
           <tr data-tag="${item.tag}">
-            <td>${originalContent}</td>
+            <td>${item.content}</td>
             <td style="display:none;">${item.title || ''}</td>
             <td style="display:none;">${item.url || ''}</td>
             <td style="display:none;">${item.created_at || item.date || ''}</td>
@@ -98,43 +98,57 @@ $(function () {
       });
     });
 
-    // Initialize Fuse.js
-    fuse = new Fuse(fuseData, {
-      keys: ['searchContent'],
-      threshold: 1.0 // Adjust threshold as needed
-    });
-
     // Function to highlight the search term in the content
-    function highlightTerm(html, term) {
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT, null, false);
+    /*function highlightTerm(html, term) {
       const regex = new RegExp(`(${term})`, 'gi');
-      const nodes = [];
+      return html.replace(regex, '<span class="highlight">$1</span>');
+    }*/
 
-      while (walker.nextNode()) {
-        nodes.push(walker.currentNode);
+      // Function to highlight the search term in the content
+    function highlightTerm(html, term) {
+      const regex = new RegExp(`(${term})(?![^<>]*>)`, 'gi');
+
+      // Create a temporary DOM element to hold the HTML content
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+
+      // Function to recursively highlight text nodes
+      function recursiveHighlight(node) {
+        if (node.nodeType === 3) { // Node is a text node
+          if (!node.parentElement.closest('img') && ( !node.parentElement.hasAttribute('id') || !node.parentElement.hasAttribute('href') ) ) {
+            // Only highlight if the parent is not an anchor, image or has an ID attribute
+            const match = node.nodeValue.match(regex);
+            if (match) {
+              const span = document.createElement('span');
+              span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
+              node.parentNode.replaceChild(span, node);
+            }
+          }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+          // Recurse for element nodes, but skip script and style tags
+          for (let i = 0; i < node.childNodes.length; i++) {
+            recursiveHighlight(node.childNodes[i]);
+          }
+        }
       }
 
-      nodes.forEach(node => {
-        const parent = node.parentNode;
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
-        while (tempDiv.firstChild) {
-          parent.insertBefore(tempDiv.firstChild, node);
-        }
-        parent.removeChild(node);
-      });
+      // Start the recursive highlighting from the temporary div's children
+      for (let i = 0; i < tempDiv.childNodes.length; i++) {
+        recursiveHighlight(tempDiv.childNodes[i]);
+      }
 
-      return doc.body.innerHTML;
+      return tempDiv.innerHTML;
     }
+
 
     // Search functionality
     $('#search').on('input', function() {
       const searchTerm = $(this).val();
       if (searchTerm) {
-        const result = fuse.search(searchTerm);
-        const filteredTableData = result.map(({ item }) => {
-          const highlightedContent = highlightTerm(item.searchContent, searchTerm);
+        const results = lunrIndex.search(searchTerm);
+        const filteredTableData = results.map(result => {
+          const item = data[result.ref];
+          const highlightedContent = highlightTerm(item.content, searchTerm);
           return `
             <tr data-tag="${item.tag}">
               <td>${highlightedContent}</td>
