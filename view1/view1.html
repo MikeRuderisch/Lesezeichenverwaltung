@@ -7,19 +7,18 @@
   <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-</head>
+  </head>
 <body>
   <h1>Alle Lesezeichen</h1>
   <table id="example" class="display" style="width:100%">
     <thead>
         <tr>
+            <th>Category</th>
+            <th>Tags</th>
             <th>Title</th>
             <th>Author</th>
-            <th>Tags</th>
-            <th>Category</th>
             <th>Added at</th>
             <th>URL</th>
-            <th>Action</th>
         </tr>
     </thead>
   </table>
@@ -37,13 +36,20 @@
                 minute: '2-digit',
                 second: '2-digit'
             }),
-            action: '<button class="open-tab-button">Open Tab</button>'
+            tags: item.tags.split('/').map(tag => `<span class="tag">${tag}</span>`).join(' '),
         }));
 
         $('#example').DataTable({
             data: convertedData,
             columns: [
             { title: 'Category', data: 'category' },
+            { 
+                title: 'Tags', 
+                data: 'tags',
+                render: function(data) {
+                    return data;
+                }
+            },
             { title: 'Title', data: 'title' },
             { title: 'Author', data: 'author' },
             { title: 'Added at', data: 'addedAt' },
@@ -54,23 +60,69 @@
                     return `<a href="${data}">${data}</a>`;
                 }
             },
-            { title: 'Tags', data: 'tags' }
+
             ],
             pageLength: -1,
             lengthMenu: [[-1], ['All']],
             dom: 'frti',
             initComplete: function () {
-                this.api().columns().every(function () {
+                this.api().columns().every(function (index) {
                     let column = this;
                     let title = $(column.header()).text();
 
+                    // Create container for input and button
+                    let container = document.createElement('div');
+                    container.style.display = 'flex';
+                    container.style.alignItems = 'center';
+
+                    // Create input element
                     let input = document.createElement('input');
                     input.placeholder = title;
-                    $(input).appendTo($(column.header()).empty()).on('keyup change', function () {
+                    $(input).addClass('column-search');
+
+                    // Create clear button
+                    let clearButton = document.createElement('span');
+                    clearButton.innerHTML = '✖'; // Unicode "X" symbol
+                    $(clearButton).addClass('clear-button');
+
+                    // Append input and button to container
+                    container.appendChild(input);
+                    container.appendChild(clearButton);
+
+                    // Append container to column header
+                    $(column.header()).empty().append(container);
+
+                    // Add event listener to input element
+                    $(input).on('keyup change', function () {
                         if (column.search() !== this.value) {
                             column.search(this.value).draw();
                         }
                     });
+
+                    // Add event listener to clear button
+                    $(clearButton).on('click', function () {
+                        $(input).val('');
+                        column.search('').draw();
+                    });
+                });
+
+                $('#example tbody').on('click', 'span.tag', function() {
+                    let tagText = $(this).text();
+                    let tagsColumnIndex = 1; 
+                    let tagsSearchBox = $('thead tr th').eq(tagsColumnIndex).find('input');
+
+                    // Get all tags in the same cell
+                    let allTags = $(this).parent().find('span.tag').map(function() {
+                        return $(this).text();
+                    }).get();
+
+                    // Find the index of the clicked tag
+                    let tagIndex = allTags.indexOf(tagText);
+
+                    // If the clicked tag is not the first one, include all previous tags
+                    let searchValue = allTags.slice(0, tagIndex + 1).join(' ');
+
+                    tagsSearchBox.val(searchValue).keyup();
                 });
             }
         });
