@@ -62,3 +62,7 @@ table tr:hover {
     margin-left: 5px;
     cursor: pointer;
   }
+
+  .column-search {
+    width: 90%;
+}
