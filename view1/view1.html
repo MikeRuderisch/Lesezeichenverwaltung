@@ -43,13 +43,18 @@
         $('#example').DataTable({
             data: convertedData,
             columns: [
-                { title: 'Category', data: 'category' },
-                { title: 'Title', data: 'title' },
-                { title: 'Author', data: 'author' },
-                { title: 'Added at', data: 'addedAt' },
-                { title: 'URL', data: 'url' },
-                { title: 'Tags', data: 'tags' },
-                { title: 'Action', data: 'action' }
+            { title: 'Category', data: 'category' },
+            { title: 'Title', data: 'title' },
+            { title: 'Author', data: 'author' },
+            { title: 'Added at', data: 'addedAt' },
+            { 
+                title: 'URL', 
+                data: 'url',
+                render: function(data) {
+                    return `<a href="${data}">${data}</a>`;
+                }
+            },
+            { title: 'Tags', data: 'tags' }
             ],
             pageLength: -1,
             lengthMenu: [[-1], ['All']],
