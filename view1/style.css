@@ -66,3 +66,10 @@ table tr:hover {
   .column-search {
     width: 90%;
 }
+.ui-resizable-handle {
+    cursor: col-resize;
+}
+td.wrap {
+    white-space: pre-wrap;
+    word-break: break-all;
+}

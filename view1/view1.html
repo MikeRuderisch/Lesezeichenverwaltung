@@ -5,9 +5,11 @@
   <title>Lesezeichenverwaltung</title>
   <link href="style.css" rel="stylesheet" />
   <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet" />
+  <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-  </head>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+</head>
 <body>
   <h1>Alle Lesezeichen</h1>
   <table id="example" class="display" style="width:100%">
@@ -39,7 +41,7 @@
             tags: item.tags.split('/').map(tag => `<span class="tag">${tag}</span>`).join(' '),
         }));
 
-        $('#example').DataTable({
+        const table = $('#example').DataTable({
             data: convertedData,
             columns: [
             { title: 'Category', data: 'category' },
@@ -56,6 +58,7 @@
             { 
                 title: 'URL', 
                 data: 'url',
+                className: 'wrap',
                 render: function(data) {
                     return `<a href="${data}">${data}</a>`;
                 }
@@ -123,6 +126,22 @@
                     let searchValue = allTags.slice(0, tagIndex + 1).join(' ');
 
                     tagsSearchBox.val(searchValue).keyup();
+                });
+
+                // Make columns resizable
+                $('#example thead th').each(function() {
+                    $(this).resizable({
+                        handles: 'e',
+                        minWidth: 30,
+                        stop: function(event, ui) {
+                            // Prevent resizing beyond table width
+                            let newWidth = ui.size.width;
+                            let columnIndex = $(this).index();
+                            table.columns(columnIndex).every(function() {
+                                $(this.header()).css('width', newWidth);
+                            });
+                        }
+                    });
                 });
             }
         });
