@@ -49,3 +49,27 @@ table tr:hover {
     background-color: #fff;
     border: 1px solid #ddd;
 }
+.tag {
+    display: inline-block;
+    padding: 2px 4px;
+    margin: 2px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .clear-button {
+    margin-left: 5px;
+    cursor: pointer;
+  }
+
+  .column-search {
+    width: 90%;
+}
+.ui-resizable-handle {
+    cursor: col-resize;
+}
+td.wrap {
+    white-space: pre-wrap;
+    word-break: break-all;
+}
