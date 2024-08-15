@@ -1,6 +1,6 @@
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     line-height: 1.6;
     color: #333;
     margin: 20px;
@@ -26,10 +26,12 @@ table {
 table, th, td {
     border: 1px solid #ddd;
     padding: 8px;
+    font-size: 16px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 th {
-    background-color: #999999;
+    background-color: #cfcfcfd8;
     color: white;
     text-align: left;
 }
@@ -72,4 +74,12 @@ table tr:hover {
 td.wrap {
     white-space: pre-wrap;
     word-break: break-all;
+}
+
+th.sorting:after,
+th.sorting_desc:after,
+th.sorting_asc:after {
+    color: #292929; 
+    font-size: 13x;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
