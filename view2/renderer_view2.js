@@ -5,16 +5,32 @@ $(function () {
     const categories = new Set();
     const treeData = [];
     const tableData = [];
-    let fuse;
 
-    data.forEach((item) => {
+    // Lunr.js index
+    const lunrIndex = lunr(function () {
+      this.ref('id');
+      this.field('title');
+      this.field('content');
+      this.field('category');
+
+      data.forEach(function (doc, idx) {
+        this.add({
+          id: idx,
+          title: doc.title,
+          content: doc.content,
+          category: doc.category
+        });
+      }, this);
+    });
+
+    data.forEach((item, index) => {
       // Build jsTree data structure
       const tagParts = item.tag.split('/');
       let currentLevel = treeData;
       tagParts.forEach((part, index) => {
         let existingNode = currentLevel.find(node => node.text === part);
         if (!existingNode) {
-          existingNode = { text: part, children: [], state: { opened: true, selected: true } }; // Ensure nodes are expanded and checked
+          existingNode = { text: part, children: [], state: { opened: true, selected: true } };
           currentLevel.push(existingNode);
         }
         currentLevel = existingNode.children;
@@ -26,10 +42,10 @@ $(function () {
       // Build table data
       const tableRow = `
         <tr data-tag="${item.tag}">
-          <td>${item.contents || item.content || ''}</td>
-          <td>${item.title || ''}</td>
-          <td>${item.url || ''}</td>
-          <td>${item.created_at || item.date || ''}</td>
+          <td>${item.content}</td>
+          <td style="display:none;">${item.title || ''}</td>
+          <td style="display:none;">${item.url || ''}</td>
+          <td style="display:none;">${item.created_at || item.date || ''}</td>
         </tr>`;
       tableData.push(tableRow);
     });
@@ -40,6 +56,8 @@ $(function () {
         'data': treeData
       },
       "plugins": ["checkbox"]
+    }).on('ready.jstree', function() {
+      $(this).jstree('open_all');
     });
 
     // Populate table
@@ -56,13 +74,14 @@ $(function () {
       const filteredTableData = filteredData.map(item => {
         return `
           <tr data-tag="${item.tag}">
-            <td>${item.contents || item.content || ''}</td>
-            <td>${item.title || ''}</td>
-            <td>${item.url || ''}</td>
-            <td>${item.created_at || item.date || ''}</td>
+            <td>${item.content}</td>
+            <td style="display:none;">${item.title || ''}</td>
+            <td style="display:none;">${item.url || ''}</td>
+            <td style="display:none;">${item.created_at || item.date || ''}</td>
           </tr>`;
       });
       $('table tbody').html(filteredTableData.join(''));
+      updateJsTree(filteredData);
     });
 
     // Reset button
@@ -82,30 +101,93 @@ $(function () {
       });
     });
 
-    // Initialize Fuse.js
-    fuse = new Fuse(data, {
-      keys: ['contents', 'title', 'url', 'created_at'],
-      threshold: 0.4
-    });
+    // Function to highlight the search term in the content
+    /*function highlightTerm(html, term) {
+      const regex = new RegExp(`(${term})`, 'gi');
+      return html.replace(regex, '<span class="highlight">$1</span>');
+    }*/
+
+      // Function to highlight the search term in the content
+    function highlightTerm(html, term) {
+      const regex = new RegExp(`(${term})(?![^<>]*>)`, 'gi');
+
+      // Create a temporary DOM element to hold the HTML content
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+
+      // Function to recursively highlight text nodes
+      function recursiveHighlight(node) {
+        if (node.nodeType === 3) { // Node is a text node
+          if (!node.parentElement.closest('img') && ( !node.parentElement.hasAttribute('id') || !node.parentElement.hasAttribute('href') ) ) {
+            // Only highlight if the parent is not an anchor, image or has an ID attribute
+            const match = node.nodeValue.match(regex);
+            if (match) {
+              const span = document.createElement('span');
+              span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
+              node.parentNode.replaceChild(span, node);
+            }
+          }
+        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+          // Recurse for element nodes, but skip script and style tags
+          for (let i = 0; i < node.childNodes.length; i++) {
+            recursiveHighlight(node.childNodes[i]);
+          }
+        }
+      }
+
+      // Start the recursive highlighting from the temporary div's children
+      for (let i = 0; i < tempDiv.childNodes.length; i++) {
+        recursiveHighlight(tempDiv.childNodes[i]);
+      }
+
+      return tempDiv.innerHTML;
+    }
+
 
     // Search functionality
     $('#search').on('input', function() {
       const searchTerm = $(this).val();
       if (searchTerm) {
-        const result = fuse.search(searchTerm);
-        const filteredTableData = result.map(({ item }) => {
+        const results = lunrIndex.search(searchTerm);
+        const filteredTableData = results.map(result => {
+          const item = data[result.ref];
+          const highlightedContent = highlightTerm(item.content, searchTerm);
           return `
             <tr data-tag="${item.tag}">
-              <td>${item.contents || item.content || ''}</td>
-              <td>${item.title || ''}</td>
-              <td>${item.url || ''}</td>
-              <td>${item.created_at || item.date || ''}</td>
+              <td>${highlightedContent}</td>
+              <td style="display:none;">${item.title || ''}</td>
+              <td style="display:none;">${item.url || ''}</td>
+              <td style="display:none;">${item.created_at || item.date || ''}</td>
             </tr>`;
         });
         $('table tbody').html(filteredTableData.join(''));
+        updateJsTree(results.map(result => data[result.ref]));
       } else {
         $('table tbody').html(tableData.join(''));
+        $('#jstree').jstree('check_all');
+        $('#jstree').jstree('open_all');
       }
     });
+
+    // Function to update jsTree based on filtered data
+    function updateJsTree(filteredData) {
+      const tags = filteredData.map(item => item.tag);
+      $('#jstree').jstree('uncheck_all');
+
+      tags.forEach(tag => {
+        const tagParts = tag.split('/');
+        let nodeId = '#';
+        tagParts.forEach(part => {
+          const node = $('#jstree').jstree('get_node', nodeId).children.find(childId => {
+            return $('#jstree').jstree('get_node', childId).text === part;
+          });
+          if (node) {
+            nodeId = node;
+          }
+        });
+        $('#jstree').jstree('check_node', nodeId);
+      });
+      $('#jstree').jstree('open_all', nodeId);
+    }
   });
 });

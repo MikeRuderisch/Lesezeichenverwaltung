@@ -6,35 +6,54 @@
   <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet" />
   <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-  
 </head>
 <body>
-    <!-- https://www.npmjs.com/package/electron-tabs -->
-    <tab-group sortable="true"></tab-group>
-    <script src="node_modules/electron-tabs/dist/electron-tabs.js"></script>
-    <script>
-        // Add default tabs
-        const tabGroup = document.querySelector("tab-group");
-        
-        const tab1 = tabGroup.addTab({
-            title: "Alle Lesezeichen",
-            src: "view1/view1.html",
-            active: true,
-            closable: false
-        });
+  <!-- Buttons to open a specific new tab -->
+  <button id="openNewTabButton">Alle Lesezeichen</button>
+  <button id="openNewTabButton2">Inhalte anzeigen</button>
+  <!-- Electron Tabs group -->
+  <tab-group sortable="true"></tab-group>
+  <script src="node_modules/electron-tabs/dist/electron-tabs.js"></script>
+  <script>
+    // Initialize the tab group
+    const tabGroup = document.querySelector("tab-group");
 
-        const tab2 = tabGroup.addTab({
-            title: "Zweite Ansicht",
-            src: "view2/view2.html",
-            closable: false
-        });
+    // Add default tabs
+    const tab1 = tabGroup.addTab({
+      title: "Alle Lesezeichen",
+      src: "view1/view1.html",
+      active: true,
+      closable: false
+    });
 
-        const tab3 = tabGroup.addTab({
-            title: "Zeit",
-            src: "https://www.zeit.de/index"
+    const tab2 = tabGroup.addTab({
+      title: "Inhalte anzeigen",
+      src: "view2/view2.html",
+      closable: false
+    });
+
+    // Funktionen um neuen Tabs mit den jeweiligen Views zu öffnen
+    function openNewTabWithView1() {
+      tabGroup.addTab({
+        title: "Alle Lesezeichen",
+        src: "view1/view1.html",
+        active: true,
+        closable: true
+      });
+      }
+      function openNewTabWithView2() {
+        tabGroup.addTab({
+          title: "Inhalte anzeigen",
+          src: "view2/view2.html",
+          active: true,
+          closable: true
         });
+        }
+
+    // event listener für Buttons
+    document.getElementById('openNewTabButton').addEventListener('click', openNewTabWithView1);
+    document.getElementById('openNewTabButton2').addEventListener('click', openNewTabWithView2);
   </script>
-  <button id="sendButton">Klick mich</button>
   <script src="renderer_general.js"></script>
 </body>
 </html>
