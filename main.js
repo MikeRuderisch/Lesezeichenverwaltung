@@ -30,7 +30,7 @@ function createWindow() {
     }))
 
     //Show Firebug
-    window.webContents.openDevTools();
+    //window.webContents.openDevTools();
 
     window.on("closed", () => {
         window = null;

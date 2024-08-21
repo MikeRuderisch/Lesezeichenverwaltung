@@ -82,6 +82,7 @@ $(function () {
       });
       $('table tbody').html(filteredTableData.join(''));
       updateJsTree(filteredData);
+      initializeObserver(); 
     });
 
     // Reset button
@@ -89,6 +90,7 @@ $(function () {
       $('table tbody').html(tableData.join(''));
       $('#jstree').jstree('check_all');
       $('#jstree').jstree('open_all');
+      initializeObserver(); 
     });
 
     // Update table visibility based on jsTree changes
@@ -99,59 +101,71 @@ $(function () {
         const isVisible = rowTag.some(tag => selectedNodes.includes(tag));
         $(this).toggle(isVisible);
       });
+      initializeObserver(); 
     });
 
-    // Function to highlight the search term in the content
-    /*function highlightTerm(html, term) {
-      const regex = new RegExp(`(${term})`, 'gi');
-      return html.replace(regex, '<span class="highlight">$1</span>');
-    }*/
+    // IntersectionObserver initialization
+    function initializeObserver() {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const visibleTag = entry.target.dataset.tag;
+            const jstreePath = visibleTag.split('/').join('_');
+            //document.querySelector('h1').textContent = jstreePath;
+            const nodeId = findNodeIdByPath(jstreePath);
 
-      // Function to highlight the search term in the content
-    function highlightTerm(html, term) {
-      const regex = new RegExp(`(${term})(?![^<>]*>)`, 'gi');
+            if (nodeId) {
+              const nodeElement = $('#' + nodeId + '_anchor');
 
-      // Create a temporary DOM element to hold the HTML content
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = html;
-
-      // Function to recursively highlight text nodes
-      function recursiveHighlight(node) {
-        if (node.nodeType === 3) { // Node is a text node
-          if (!node.parentElement.closest('img') && ( !node.parentElement.hasAttribute('id') || !node.parentElement.hasAttribute('href') ) ) {
-            // Only highlight if the parent is not an anchor, image or has an ID attribute
-            const match = node.nodeValue.match(regex);
-            if (match) {
-              const span = document.createElement('span');
-              span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
-              node.parentNode.replaceChild(span, node);
+              if (nodeElement.length) {
+                // Reset all other nodes to normal font-weight
+                $('#jstree').find('.jstree-anchor').css("font-weight", "normal");
+                nodeElement.css("font-weight", "bold");
+              }
+            } else {
+              console.warn("Node ID not found for path:", jstreePath);
             }
           }
-        } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
-          // Recurse for element nodes, but skip script and style tags
-          for (let i = 0; i < node.childNodes.length; i++) {
-            recursiveHighlight(node.childNodes[i]);
-          }
-        }
-      }
+        });
+      }, {
+        threshold: 0.03 // 3% of the row must be visible
+      });
 
-      // Start the recursive highlighting from the temporary div's children
-      for (let i = 0; i < tempDiv.childNodes.length; i++) {
-        recursiveHighlight(tempDiv.childNodes[i]);
-      }
-
-      return tempDiv.innerHTML;
+      // Unobserve all existing elements before re-observing
+      $('table tbody tr').each(function() {
+        observer.observe(this);
+      });
     }
 
+    // Find NodeId by Path (used in Observer)
+    function findNodeIdByPath(path) {
+      const tree = $('#jstree').jstree(true);
+      let foundNodeId = null;
+
+      tree.get_json('#', { flat: true }).forEach(node => {
+        const nodePath = tree.get_path(node.id, '_');
+
+        if (nodePath === path) {
+          foundNodeId = node.id;
+        }
+      });
+
+      return foundNodeId;
+    }
+
+    // Initialize observer for the first time
+    initializeObserver();
 
     // Search functionality
     $('#search').on('input', function() {
       const searchTerm = $(this).val();
+      
       if (searchTerm) {
         const results = lunrIndex.search(searchTerm);
         const filteredTableData = results.map(result => {
           const item = data[result.ref];
           const highlightedContent = highlightTerm(item.content, searchTerm);
+
           return `
             <tr data-tag="${item.tag}">
               <td>${highlightedContent}</td>
@@ -162,13 +176,51 @@ $(function () {
         });
         $('table tbody').html(filteredTableData.join(''));
         updateJsTree(results.map(result => data[result.ref]));
+        initializeObserver(); 
       } else {
         $('table tbody').html(tableData.join(''));
         $('#jstree').jstree('check_all');
         $('#jstree').jstree('open_all');
+        initializeObserver(); 
       }
     });
 
+      // Function to highlight the search term in the content
+      function highlightTerm(html, term) {
+        const regex = new RegExp(`(${term})(?![^<>]*>)`, 'gi');
+  
+        // Create a temporary DOM element to hold the HTML content
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+  
+        // Function to recursively highlight text nodes
+        function recursiveHighlight(node) {
+          if (node.nodeType === 3) { // Node is a text node
+            if (!node.parentElement.closest('img') && ( !node.parentElement.hasAttribute('id') || !node.parentElement.hasAttribute('href') ) ) {
+              // Only highlight if the parent is not an anchor, image or has an ID attribute
+              const match = node.nodeValue.match(regex);
+              if (match) {
+                const span = document.createElement('span');
+                span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
+                node.parentNode.replaceChild(span, node);
+              }
+            }
+          } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+            // Recurse for element nodes, but skip script and style tags
+            for (let i = 0; i < node.childNodes.length; i++) {
+              recursiveHighlight(node.childNodes[i]);
+            }
+          }
+        }
+  
+        // Start the recursive highlighting from the temporary div's children
+        for (let i = 0; i < tempDiv.childNodes.length; i++) {
+          recursiveHighlight(tempDiv.childNodes[i]);
+        }
+  
+        return tempDiv.innerHTML;
+      }
+  
     // Function to update jsTree based on filtered data
     function updateJsTree(filteredData) {
       const tags = filteredData.map(item => item.tag);
