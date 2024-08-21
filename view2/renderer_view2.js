@@ -102,12 +102,6 @@ $(function () {
     });
 
     // Function to highlight the search term in the content
-    /*function highlightTerm(html, term) {
-      const regex = new RegExp(`(${term})`, 'gi');
-      return html.replace(regex, '<span class="highlight">$1</span>');
-    }*/
-
-      // Function to highlight the search term in the content
     function highlightTerm(html, term) {
       const regex = new RegExp(`(${term})(?![^<>]*>)`, 'gi');
 
@@ -143,6 +137,53 @@ $(function () {
       return tempDiv.innerHTML;
     }
 
+    // IntersectionObserver to detect which table row is currently visible
+    const observer = new IntersectionObserver(entries => {
+
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const visibleTag = entry.target.dataset.tag;
+          const jstreePath = visibleTag.split('/').join('_'); 
+          document.querySelector('h1').textContent = jstreePath;
+          const nodeId = findNodeIdByPath(jstreePath);
+          
+          const nodeElement = $('#' + nodeId + '_anchor'); 
+
+          if (nodeElement.length) {
+            nodeElement.css("font-weight", "bold");
+          }
+        }
+      });
+    }, {
+      threshold: 0.03 // 3% of the row must be visible
+    });
+
+    //Find ID to Path (used in Observer)
+    function findNodeIdByPath(path) {
+      const tree = $('#jstree').jstree(true);
+      let foundNodeId = null;
+
+      tree.get_json('#', { flat: true }).forEach(node => {
+          //Set all Nodes to NOT_BOLD
+          const nodeElement = $('#' + node.id + '_anchor');
+          nodeElement.css("font-weight", "normal");
+
+
+          const nodePath = tree.get_path(node.id, '_');
+          
+          if (nodePath === path) {
+              foundNodeId = node.id;
+          }
+      });
+  
+      return foundNodeId;
+    }
+  
+
+    // Means that Observer looks at all table rows
+    $('table tbody tr').each(function() {
+      observer.observe(this);
+    });
 
     // Search functionality
     $('#search').on('input', function() {
