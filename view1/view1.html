@@ -12,6 +12,7 @@
 </head>
 <body>
   <h1>Alle Lesezeichen</h1>
+</body>
   <table id="example" class="display" style="width:100%">
     <thead>
         <tr>
@@ -25,129 +26,123 @@
     </thead>
   </table>
   <script>
-    fetch('bookmarks.json')
-    .then(response => response.json())
-    .then(data => {
-        const convertedData = data.map(item => ({
-            ...item,
-            addedAt: new Date(item.addedAt * 1000).toLocaleString('de-DE', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            }),
-            tags: item.tags.split('/').map(tag => `<span class="tag">${tag}</span>`).join(' / '),
-        }));
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('bookmarks.json')
+            .then(response => response.json())
+            .then(data => {
+                const convertedData = data.map(item => ({
+                    ...item,
+                    addedAt: new Date(item.addedAt * 1000).toLocaleString('de-DE', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }),
+                    tags: item.tags.split('/').map(tag => `<span class="tag">${tag}</span>`).join(' / '),
+                }));
 
-        const table = $('#example').DataTable({
-            data: convertedData,
-            columns: [
-            { title: 'Category', data: 'category' },
-            { 
-                title: 'Tags', 
-                data: 'tags',
-                render: function(data) {
-                    return data;
-                }
-            },
-            { title: 'Title', data: 'title' },
-            { title: 'Author', data: 'author' },
-            { title: 'Added at', data: 'addedAt' },
-            { 
-                title: 'URL', 
-                data: 'url',
-                className: 'wrap',
-                render: function(data) {
-                    return `<a href="${data}">${data}</a>`;
-                }
-            },
+                $('#example').DataTable({
+                    data: convertedData,
+                    columns: [
+                        { title: 'Category', data: 'category' },
+                        { 
+                            title: 'Tags', 
+                            data: 'tags',
+                            render: function(data) {
+                                return data;
+                            }
+                        },
+                        { title: 'Title', data: 'title' },
+                        { title: 'Author', data: 'author' },
+                        { title: 'Added at', data: 'addedAt' },
+                        { 
+                            title: 'URL', 
+                            data: 'url',
+                            className: 'wrap',
+                            render: function(data) {
+                                return `<a href="#" onclick="openExternalLink('${data}')">${data}</a>`;
+                            }
+                        },
+                    ],
+                    pageLength: -1,
+                    lengthMenu: [[-1], ['All']],
+                    dom: 'frti',
+                    initComplete: function () {
+                        this.api().columns().every(function (index) {
+                            let column = this;
+                            let title = $(column.header()).text();
 
-            ],
-            pageLength: -1,
-            lengthMenu: [[-1], ['All']],
-            dom: 'frti',
-            initComplete: function () {
-                this.api().columns().every(function (index) {
-                    let column = this;
-                    let title = $(column.header()).text();
+                            let container = document.createElement('div');
+                            container.style.display = 'flex';
+                            container.style.alignItems = 'center';
 
-                    // Create container for input and button
-                    let container = document.createElement('div');
-                    container.style.display = 'flex';
-                    container.style.alignItems = 'center';
+                            let input = document.createElement('input');
+                            input.placeholder = title;
+                            $(input).addClass('column-search');
 
-                    // Create input element
-                    let input = document.createElement('input');
-                    input.placeholder = title;
-                    $(input).addClass('column-search');
+                            let clearButton = document.createElement('span');
+                            clearButton.innerHTML = '✖';
+                            $(clearButton).addClass('clear-button');
 
-                    // Create clear button
-                    let clearButton = document.createElement('span');
-                    clearButton.innerHTML = '✖'; // Unicode "X" symbol
-                    $(clearButton).addClass('clear-button');
+                            container.appendChild(input);
+                            container.appendChild(clearButton);
 
-                    // Append input and button to container
-                    container.appendChild(input);
-                    container.appendChild(clearButton);
+                            $(column.header()).empty().append(container);
 
-                    // Append container to column header
-                    $(column.header()).empty().append(container);
-
-                    // Add event listener to input element
-                    $(input).on('keyup change', function () {
-                        if (column.search() !== this.value) {
-                            column.search(this.value).draw();
-                        }
-                    });
-
-                    // Add event listener to clear button
-                    $(clearButton).on('click', function () {
-                        $(input).val('');
-                        column.search('').draw();
-                    });
-                });
-
-                $('#example tbody').on('click', 'span.tag', function() {
-                    let tagText = $(this).text();
-                    let tagsColumnIndex = 1; 
-                    let tagsSearchBox = $('thead tr th').eq(tagsColumnIndex).find('input');
-
-                    // Get all tags in the same cell
-                    let allTags = $(this).parent().find('span.tag').map(function() {
-                        return $(this).text();
-                    }).get();
-
-                    // Find the index of the clicked tag
-                    let tagIndex = allTags.indexOf(tagText);
-
-                    // If the clicked tag is not the first one, include all previous tags
-                    let searchValue = allTags.slice(0, tagIndex + 1).join(' / ');
-
-                    tagsSearchBox.val(searchValue).keyup();
-                });
-
-                // Make columns resizable
-                $('#example thead th').each(function() {
-                    $(this).resizable({
-                        handles: 'e',
-                        minWidth: 30,
-                        stop: function(event, ui) {
-                            // Prevent resizing beyond table width
-                            let newWidth = ui.size.width;
-                            let columnIndex = $(this).index();
-                            table.columns(columnIndex).every(function() {
-                                $(this.header()).css('width', newWidth);
+                            $(input).on('keyup change', function () {
+                                if (column.search() !== this.value) {
+                                    column.search(this.value).draw();
+                                }
                             });
-                        }
-                    });
-                    
+
+                            $(clearButton).on('click', function () {
+                                $(input).val('');
+                                column.search('').draw();
+                            });
+                        });
+
+                        $('#example tbody').on('click', 'span.tag', function() {
+                            let tagText = $(this).text();
+                            let tagsColumnIndex = 1; 
+                            let tagsSearchBox = $('thead tr th').eq(tagsColumnIndex).find('input');
+
+                            let allTags = $(this).parent().find('span.tag').map(function() {
+                                return $(this).text();
+                            }).get();
+
+                            let tagIndex = allTags.indexOf(tagText);
+                            let searchValue = allTags.slice(0, tagIndex + 1).join(' / ');
+
+                            tagsSearchBox.val(searchValue).keyup();
+                        });
+
+                        $('#example thead th').each(function() {
+                            $(this).resizable({
+                                handles: 'e',
+                                minWidth: 30,
+                                stop: function(event, ui) {
+                                    let newWidth = ui.size.width;
+                                    let columnIndex = $(this).index();
+                                    table.columns(columnIndex).every(function() {
+                                        $(this.header()).css('width', newWidth);
+                                    });
+                                }
+                            });
+                        });
+                    }
                 });
-            }
-        });
-    })
-    .catch(error => console.error('Fehler beim Laden der JSON-Daten:', error));
-  </script>
+            })
+            .catch(error => console.error('Fehler beim Laden der JSON-Daten:', error));
+    });
+
+    function openExternalLink(url) {
+        window.electronAPI.openExternal(url);
+    }
+</script>
+
+
+
 </body>
 </html>

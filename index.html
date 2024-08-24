@@ -23,7 +23,12 @@
       title: "Alle Lesezeichen",
       src: "view1/view1.html",
       active: true,
-      closable: false
+      closable: false,
+      webviewAttributes: {
+        preload: 'preload.js', // Preload script path (without path.join)
+        nodeintegration: false,
+        contextIsolation: true
+      }
     });
 
     const tab2 = tabGroup.addTab({
