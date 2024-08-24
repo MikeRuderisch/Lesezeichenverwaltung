@@ -38,7 +38,7 @@
                 minute: '2-digit',
                 second: '2-digit'
             }),
-            tags: item.tags.split('/').map(tag => `<span class="tag">${tag}</span>`).join(' '),
+            tags: item.tags.split('/').map(tag => `<span class="tag">${tag}</span>`).join(' / '),
         }));
 
         const table = $('#example').DataTable({
@@ -123,7 +123,7 @@
                     let tagIndex = allTags.indexOf(tagText);
 
                     // If the clicked tag is not the first one, include all previous tags
-                    let searchValue = allTags.slice(0, tagIndex + 1).join(' ');
+                    let searchValue = allTags.slice(0, tagIndex + 1).join(' / ');
 
                     tagsSearchBox.val(searchValue).keyup();
                 });
@@ -142,6 +142,7 @@
                             });
                         }
                     });
+                    
                 });
             }
         });
