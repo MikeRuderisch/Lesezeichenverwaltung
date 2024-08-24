@@ -1,59 +1,68 @@
 console.log("Lesezeichenverwaltung");
 
 const electron = require("electron");
-const { ipcMain } = require('electron');
-
+const { ipcMain, shell } = require('electron'); // Import shell here only once
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const url = require("url");
 const fs = require("fs");
 
-let window; 
+let window;
 
 function createWindow() { 
     window = new BrowserWindow({
         backgroundColor: '#fff',
-        webPreferences:{
+        webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
             enableRemoteModule: false,
             webviewTag: true
-        },    
-
-
+        }
     });
+
+    // Handle external URLs to open in the default system browser
+    window.webContents.setWindowOpenHandler(({ url }) => {
+        shell.openExternal(url);
+        return { action: 'deny' };
+    });
+
+    // Load the main HTML file
     window.loadURL(url.format({
         pathname: path.join(__dirname, "index.html"),
         protocol: "file",
         slashes: true
-    }))
+    }));
 
-    //Show Firebug
-    //window.webContents.openDevTools();
+    // Show developer tools (optional)
+    // window.webContents.openDevTools();
 
     window.on("closed", () => {
         window = null;
-    })
+    });
 }
 
+// Listen for external link open requests from the Renderer process
+ipcMain.on('open-external', (event, url) => {
+    shell.openExternal(url);
+});
 
-
+// Example IPC listener for other messages
 ipcMain.on("messageChannel", (event, message) => {
     console.log(message); // "Hello from Renderer"
     event.reply("replyChannel", "Received your message!");
-  });
+});
 
+// Create the window when Electron is ready
+app.on("ready", createWindow);
 
 /*const dataPath = path.join(__dirname, 'view1/bookmarks.json');
-  fs.readFile(dataPath, (err, data) => {
+fs.readFile(dataPath, (err, data) => {
     if (err) throw err;
-    // Senden der Daten an den Renderer-Prozess
+    // Send data to the renderer process
 
     console.log("Daten senden");
     window.on('ready-to-show', () => {
     window.webContents.send('data', JSON.parse(data));
     });
-  });
-*/
-app.on("ready", createWindow);
+}); */

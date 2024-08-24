@@ -1,11 +1,6 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { ipcRenderer, contextBridge } = require('electron');
 
-contextBridge.exposeInMainWorld(
-  'electronAPI', {
-    sendMessage: (channel, message) => ipcRenderer.send(channel, message),
-    receiveMessage: (channel, func) => {
-        ipcRenderer.on(channel, (event, ...args) => func(...args));
-    },
-   
-}
-);
+//Provide the context Bridge to open the url external
+contextBridge.exposeInMainWorld('electronAPI', {
+    openExternal: (url) => ipcRenderer.send('open-external', url)
+});
