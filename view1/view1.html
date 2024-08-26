@@ -12,7 +12,12 @@
 </head>
 <body>
   <h1>Alle Lesezeichen</h1>
-</body>
+
+  <!-- Drag-and-Drop Bereich -->
+  <div id="dropZone" style="border: 2px dashed #ccc; padding: 20px; text-align: center; margin-bottom: 20px;">
+    JSON-Dateien hierhin ziehen und ablegen
+  </div>
+
   <table id="example" class="display" style="width:100%">
     <thead>
         <tr>
@@ -25,12 +30,60 @@
         </tr>
     </thead>
   </table>
+  
   <script>
+    let tableData = [];
+
+    // Verarbeiten der Daten aus Drag und Drop Bereich
+    const dropZone = document.getElementById('dropZone');
+
+    dropZone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.style.backgroundColor = '#f0f0f0';
+    });
+
+    dropZone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.style.backgroundColor = ''; 
+    });
+
+    dropZone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.style.backgroundColor = ''; 
+
+        const files = e.dataTransfer.files;
+
+        //Laden der Daten und umwandeln in notwendiges Format
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const newData = JSON.parse(e.target.result);
+                tableData = tableData.concat(newData.map(item => ({
+                    ...item,
+                    addedAt: new Date(item.addedAt * 1000).toLocaleString('de-DE', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }),
+                    tags: item.tags.split('/').map(tag => `<span class="tag">${tag}</span>`).join(' / '),
+                })));
+                $('#example').DataTable().clear().rows.add(tableData).draw();
+            };
+            reader.readAsText(file);
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
         fetch('bookmarks.json')
             .then(response => response.json())
             .then(data => {
-                const convertedData = data.map(item => ({
+                tableData = data.map(item => ({
                     ...item,
                     addedAt: new Date(item.addedAt * 1000).toLocaleString('de-DE', {
                         day: '2-digit',
@@ -44,7 +97,7 @@
                 }));
 
                 $('#example').DataTable({
-                    data: convertedData,
+                    data: tableData,
                     columns: [
                         { title: 'Category', data: 'category' },
                         { 
@@ -140,9 +193,6 @@
     function openExternalLink(url) {
         window.electronAPI.openExternal(url);
     }
-</script>
-
-
-
+  </script>
 </body>
 </html>
