@@ -45,9 +45,9 @@ table tr:hover {
 }
 
 #test1 {
-    height: 400px; /* Festlegen der maximalen Höhe für die Tabelle */
-    overflow-y: auto; /* Fügt eine vertikale Scrollbar hinzu, wenn nötig */
-    overflow-x: auto; /* Fügt eine horizontale Scrollbar hinzu, wenn nötig */
+    height: 400px; 
+    overflow-y: auto; 
+    overflow-x: auto; 
     background-color: #fff;
     border: 1px solid #ddd;
 }
