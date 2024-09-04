@@ -34,7 +34,12 @@
     const tab2 = tabGroup.addTab({
       title: "Inhalte anzeigen",
       src: "view2/view2.html",
-      closable: false
+      closable: false,
+      webviewAttributes: {
+        preload: 'preload.js', 
+        nodeintegration: false,
+        contextIsolation: true
+      }
     });
 
     // Funktionen um neuen Tabs mit den jeweiligen Views zu öffnen
