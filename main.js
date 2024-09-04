@@ -66,3 +66,10 @@ fs.readFile(dataPath, (err, data) => {
     window.webContents.send('data', JSON.parse(data));
     });
 }); */
+// Listen for the save request from the renderer process
+ipcMain.on('save-json', (event, data) => {
+    const filePath = path.join(__dirname,'View1', 'bookmarks.json'); // Speichern im gleichen Ordner wie die index.html
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8'); // Formatierte JSON speichern
+    console.log('JSON file saved successfully at:', filePath);
+    event.reply('save-json-reply', `Datei erfolgreich gespeichert: ${filePath}`);
+});
