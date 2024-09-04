@@ -12,7 +12,11 @@
 </head>
 <body>
   <h1>Alle Lesezeichen</h1>
-</body>
+  
+  <!-- Button zum Auslösen des Uploads -->
+  <button id="triggerUpload">JSON-Dateien hochladen</button>
+  <input type="file" id="uploadJson" accept=".json" multiple style="display:none" />
+
   <table id="example" class="display" style="width:100%">
     <thead>
         <tr>
@@ -25,13 +29,64 @@
         </tr>
     </thead>
   </table>
+  
   <script>
+    let tableData = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Event Listener für den Upload-Button
+        document.getElementById('triggerUpload').addEventListener('click', function() {
+            document.getElementById('uploadJson').click();
+        });
+    
+        // Hochgeladene JSON-Dateien in die Tabelle laden
+        document.getElementById('uploadJson').addEventListener('change', function(event) {
+            const files = event.target.files;
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newData = JSON.parse(e.target.result);
+                    tableData = tableData.concat(newData.map(item => ({
+                        ...item,
+                        addedAt: new Date(item.addedAt * 1000).toLocaleString('de-DE', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        }),
+                        tags: item.tags.split('/').map(tag => `<span class="tag">${tag}</span>`).join(' / '),
+                    })));
+                    $('#example').DataTable().clear().rows.add(tableData).draw();
+    
+                    // JSON-Daten speichern
+                    saveJsonDataToFile(tableData);
+                };
+                reader.readAsText(file);
+            });
+        });
+    
+        // Funktion zum Speichern der JSON-Daten über Electron
+        function saveJsonDataToFile(data) {
+            window.electronAPI.saveJsonFile(data)
+                .then(() => {
+                    console.log('Daten erfolgreich gespeichert');
+                })
+                .catch(error => {
+                    console.error('Fehler beim Speichern:', error);
+                });
+        }
+    });
+    
+
     document.addEventListener('DOMContentLoaded', () => {
         fetch('bookmarks.json')
             .then(response => response.json())
             .then(data => {
-                const convertedData = data.map(item => ({
+                tableData = data.map(item => ({
                     ...item,
+                    //Daten von addedAt in lesbares Zeitformat unwandeln
                     addedAt: new Date(item.addedAt * 1000).toLocaleString('de-DE', {
                         day: '2-digit',
                         month: '2-digit',
@@ -44,7 +99,7 @@
                 }));
 
                 $('#example').DataTable({
-                    data: convertedData,
+                    data: tableData,
                     columns: [
                         { title: 'Category', data: 'category' },
                         { 
@@ -140,9 +195,6 @@
     function openExternalLink(url) {
         window.electronAPI.openExternal(url);
     }
-</script>
-
-
-
+  </script>
 </body>
 </html>

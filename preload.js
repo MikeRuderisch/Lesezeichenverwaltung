@@ -1,6 +1,7 @@
 const { ipcRenderer, contextBridge } = require('electron');
 
-//Provide the context Bridge to open the url external
+// Provide the context Bridge to open external URLs and save JSON data
 contextBridge.exposeInMainWorld('electronAPI', {
-    openExternal: (url) => ipcRenderer.send('open-external', url)
+    openExternal: (url) => ipcRenderer.send('open-external', url),
+    saveJsonFile: (data) => ipcRenderer.send('save-json', data)  
 });
