@@ -1,3 +1,12 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 20px;
+    background-color: #f9f9f9;
+}
+
+
 tfoot input {
     width: 100%;
     padding: 3px;
@@ -51,7 +60,7 @@ tr:nth-child(even) {
 
 div.inline { 
     overflow:scroll; 
-    height: 550px;
+    height: 100vh;
     display:inline-block;
     margin-right:-4px;
 }
@@ -60,31 +69,74 @@ div.resizeable {
     resize:horizontal; 
 }
 
-button.tablebutton { 
-    width: 100%;
+button.tablebutton {
+    width: calc(100% - 10px);
     height: 50px;
     background-color: #6c757d;
     background-image: linear-gradient(#6c757d, #6c757d);
     border: 1px solid #6c757d;
     border-radius: 4px;
     box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
-    color:#ffffff;
-    margin-top: 10px;
+    color: #ffffff;
+    margin-top: 5px;
+    margin-left: 8px;
+    margin-right: 8px;
     cursor: pointer;
     font-size: 16px;
-}   
+    align-items: center;
+}
 
 button.tablebutton:active {
     transform: scale(0.98); 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
 }
 
-.wrapper{
+.wrapper {
     display: flex;
     width: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+
+.wrapper, .inline {
+    width: 100%;
+  }
+
+  body, html {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  .section {
+    display: inline-block;
+    margin: 0 40px; /* increased margin to 100px */
+
+  }
+
+  .section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%; /* Breite auf 100% setzen */
+    margin: 0 20px;
 }
-body {
-    font-family: 'Roboto', sans-serif;
-    line-height: 1.6;
+
+#search {
+    width: 20%; /* Reduziere die Breite */
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     background-color: #f9f9f9;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+button, #uploadJson {
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
 }

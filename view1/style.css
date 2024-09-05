@@ -83,3 +83,11 @@ th.sorting_asc:after {
     font-size: 13x;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
+
+button, #uploadJson {
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
