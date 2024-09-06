@@ -8,9 +8,7 @@
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
-  <!-- Buttons to open a specific new tab -->
-  <button id="openNewTabButton">Alle Lesezeichen</button>
-  <button id="openNewTabButton2">Inhalte anzeigen</button>
+
   <!-- Electron Tabs group -->
   <tab-group sortable="true"></tab-group>
   <script src="node_modules/electron-tabs/dist/electron-tabs.js"></script>
@@ -42,27 +40,6 @@
       }
     });
 
-    // Funktionen um neuen Tabs mit den jeweiligen Views zu öffnen
-    function openNewTabWithView1() {
-      tabGroup.addTab({
-        title: "Alle Lesezeichen",
-        src: "view1/view1.html",
-        active: true,
-        closable: true
-      });
-      }
-      function openNewTabWithView2() {
-        tabGroup.addTab({
-          title: "Inhalte anzeigen",
-          src: "view2/view2.html",
-          active: true,
-          closable: true
-        });
-        }
-
-    // event listener für Buttons
-    document.getElementById('openNewTabButton').addEventListener('click', openNewTabWithView1);
-    document.getElementById('openNewTabButton2').addEventListener('click', openNewTabWithView2);
   </script>
   <script src="renderer_general.js"></script>
 </body>
