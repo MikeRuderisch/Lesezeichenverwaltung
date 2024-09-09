@@ -12,12 +12,14 @@
 </head>
 <body>
   <h1>Alle Lesezeichen</h1>
-  
-  <!-- Button zum Auslösen des Uploads -->
+
   <button id="triggerUpload">JSON-Dateien hochladen</button>
   <input type="file" id="uploadJson" accept=".json" multiple style="display:none" />
 
   <table id="example" class="display" style="width:100%">
+
+</body>
+  <table id="example" class="display" style="width:100%">  
     <thead>
         <tr>
             <th>Category</th>
@@ -81,7 +83,7 @@
     
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('bookmarks.json')
+        fetch('bookmarks.json')  // zugriff auf JSON-Datei 
             .then(response => response.json())
             .then(data => {
                 tableData = data.map(item => ({
