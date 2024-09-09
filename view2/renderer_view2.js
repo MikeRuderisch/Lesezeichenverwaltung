@@ -9,43 +9,45 @@ $(function () {
     initializeData(allData);
   });
 
-          // Funktion zum Speichern der JSON-Daten über Electron
-          function saveJsonDataToFile(data) {
-            window.electronAPI.saveJsonFile2(data)
-        }
-  
-  $('#uploadButton').on('click', function () {
-    const fileInput = document.getElementById('uploadJson');
+  // Funktion zum Speichern der JSON-Daten über Electron
+  function saveJsonDataToFile(data) {
+    window.electronAPI.saveJsonFile2(data);
+  }
+
+  // Event Listener für den Trigger-Button in View 2
+  $('#triggerUpload').on('click', function () {
+    $('#uploadJson').click();  // Simuliere Klick auf das versteckte Input-Feld
+  });
+
+  // Event Listener für den eigentlichen Upload in View 2
+  $('#uploadJson').on('change', function () {
+    const fileInput = this;
     const file = fileInput.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            try {
-                const newData = JSON.parse(e.target.result);
-                // Merge the new data with the existing data
-                allData = allData.concat(newData);
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const newData = JSON.parse(e.target.result);
+          // Merge the new data with the existing data
+          allData = allData.concat(newData);
 
-                // Reinitialize Lunr Index with new data
-                lunrIndex = createLunrIndex(allData);
+          // Reinitialize Lunr Index with new data
+          lunrIndex = createLunrIndex(allData);
 
-                // Reinitialize the display with the merged data
-                
-                initializeData(allData);
+          // Reinitialize the display with the merged data
+          initializeData(allData);
 
-                saveJsonDataToFile(allData);
-                
-                
-            } catch (err) {
-              alert('Error parsing JSON:\n' + err.message);
-                alert('Invalid JSON file.');
-            }
-        };
-        reader.readAsText(file);
-        
+          saveJsonDataToFile(allData);
+        } catch (err) {
+          alert('Error parsing JSON:\n' + err.message);
+          alert('Invalid JSON file.');
+        }
+      };
+      reader.readAsText(file);
     } else {
-        alert('Please select a file.');
+      alert('Please select a file.');
     }
-});
+  });
 
 
   function createLunrIndex(data) {

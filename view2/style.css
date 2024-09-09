@@ -14,28 +14,26 @@ tfoot input {
 }
 
 #tree {
-    border-bottom: 2px solid black;
-    border-left: 2px solid black;
-    border-top: 2px solid black;
     width: 19%;
+    min-width: 250px;
 }
 
 .highlight {
     background-color: yellow; 
   }
 
+  
 #table {
-    border-top: 2px solid black;
-    border-bottom: 2px solid black;
+
     width: 70%;
+    min-width: 500px
 }
 
 #category {
-    border-bottom: 2px solid black;
-    border-right: 2px solid black;
-    border-top: 2px solid black;
+
     width: 10%;
     flex-grow: 1;
+    min-width: 150px;
 }
 
 table {
@@ -59,10 +57,9 @@ tr:nth-child(even) {
 }
 
 div.inline { 
-    overflow:scroll; 
-    height: 100vh;
+    overflow:auto; 
+    height: 80vh;
     display:inline-block;
-    margin-right:-4px;
 }
 
 div.resizeable {
@@ -91,13 +88,14 @@ button.tablebutton:active {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
 }
 
-.wrapper {
+  .wrapper {
     display: flex;
     width: 100%;
-    height: 100vh;
+    height: 80.5vh;
     overflow: hidden;
-  }
-
+    border: 2px solid black; /* Rahmen hinzufügen */
+    box-sizing: border-box; /* Damit der Rahmen zur Größe gezählt wird */
+}
 
 .wrapper, .inline {
     width: 100%;
