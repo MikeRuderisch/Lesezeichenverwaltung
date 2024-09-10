@@ -10,21 +10,20 @@
 
   <h1>Vollständige Artikel</h1>
 
-  <!-- Button to trigger the upload -->
+  <!-- Neue JSON-Datei hochladen -->
   <button id="triggerUpload">JSON-Dateien hochladen</button>
-  <input type="file" id="uploadJson" accept=".json" multiple style="display:none" />
+  <input type="file" id="uploadJson" accept=".json" multiple style="display:none" /></br></br>
 
-</br></br>
-  <!-- Button to reset the search   -->
-    <button>Reset</button>
-    <input type="text" id="search" placeholder="Search...">
+  <!-- Reset-Button -->
+  <button>Reset</button>
+  <input type="text" id="search" placeholder="Search...">
 
   <div class="wrapper">
-  <div class="inline resizeable" id="tree">
-    <div id="jstree">
-      <!-- will be dynamically generated -->
+    <div class="inline resizeable" id="tree">
+      <div id="jstree">
+        <!-- wird automatisch generiert -->
+      </div>
     </div>
-  </div>
     <div class="inline resizeable" id="table">
       <table>
         <thead>
@@ -36,7 +35,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- will be dynamically generated -->
+          <!-- wird automatisch generiert -->
         </tbody>
       </table>
     </div>
@@ -44,14 +43,12 @@
     </div>
   </div>
 
-  <!-- include jQuery library for JSTree -->
+  <!-- JSTree -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="dist/jstree.min.js"></script>
-  <!-- Load Data -->
+  <!-- Logik-File -->
   <script src="renderer_view2.js"></script>
-  <!-- Fuzzy Search -->
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.min.js"></script>
-  <!-- Second Attempt Search -->
+  <!-- Lunr.js Suche -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
 
 </body>

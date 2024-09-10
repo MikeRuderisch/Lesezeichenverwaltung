@@ -2,24 +2,24 @@ $(function () {
   let allData = [];
   let lunrIndex;
 
-  // Load JSON data
+  // JSON-Datei einlesen
   $.getJSON('longForm_Articles.json', function (data) {
     allData = data;
-    lunrIndex = createLunrIndex(allData);  // Initialisiere den Lunr.js Index
+    lunrIndex = createLunrIndex(allData); 
     initializeData(allData);
   });
 
-  // Funktion zum Speichern der JSON-Daten über Electron
+  // Funktion zur Integration einer neuen JSON-Datei
   function saveJsonDataToFile(data) {
     window.electronAPI.saveJsonFile2(data);
   }
 
-  // Event Listener für den Trigger-Button in View 2
+  // Event Listener für Upload neuer JSON-Datei
   $('#triggerUpload').on('click', function () {
-    $('#uploadJson').click();  // Simuliere Klick auf das versteckte Input-Feld
+    $('#uploadJson').click();  // Simuliere Klick auf verstecktes Input-Feld
   });
 
-  // Event Listener für den eigentlichen Upload in View 2
+  // Upload einer neuen JSON-Datei
   $('#uploadJson').on('change', function () {
     const fileInput = this;
     const file = fileInput.files[0];
@@ -28,13 +28,13 @@ $(function () {
       reader.onload = function (e) {
         try {
           const newData = JSON.parse(e.target.result);
-          // Merge the new data with the existing data
+          // Neue Daten mit alten Daten mergen
           allData = allData.concat(newData);
 
-          // Reinitialize Lunr Index with new data
+          // Lunr Tabelleneinträge indexieren (neue/alle Daten)
           lunrIndex = createLunrIndex(allData);
 
-          // Reinitialize the display with the merged data
+          // Alle Daten anzeigen
           initializeData(allData);
 
           saveJsonDataToFile(allData);
@@ -49,38 +49,35 @@ $(function () {
     }
   });
 
-
+  // Lunr Tabelleneinträge indexieren (Token Generierung)
   function createLunrIndex(data) {
     return lunr(function () {
       this.ref('id');
-      this.field('title');
       this.field('content');
-      this.field('category');
 
       data.forEach(function (doc, idx) {
         this.add({
           id: idx,
-          title: doc.title,
           content: doc.content,
-          category: doc.category
         });
       }, this);
     });
   }
 
+  // JSTree, Tabelle, Buttons aufbauen
   function initializeData(data) {
-    // Clear previous data
+    // Bisherige Daten löschen
     $('#jstree').jstree("destroy").empty();
     $('table tbody').empty();
     $('#category').empty();
 
-    // Rebuild tree, table, and category buttons
     const categories = new Set();
     const treeData = [];
     const tableData = [];
 
+    // Neuaufbau JSTree, Tabelle und Buttons
     data.forEach((item, index) => {
-      // Build jsTree data structure
+      // JSTree
       const tagParts = item.tag.split('/');
       let currentLevel = treeData;
       tagParts.forEach((part, index) => {
@@ -92,10 +89,10 @@ $(function () {
         currentLevel = existingNode.children;
       });
 
-      // Collect categories
+      // Buttons (Category)
       categories.add(item.category);
 
-      // Build table data
+      // Tabelle
       const tableRow = `
         <tr data-tag="${item.tag}">
           <td>${item.content}</td>
@@ -106,27 +103,30 @@ $(function () {
       tableData.push(tableRow);
     });
 
-    // Initialize jsTree
+    // JSTree initialisieren
     $('#jstree').jstree({
       'core': {
         'data': treeData
       },
+      // Aktiviert Plugin "Checkbox"
       "plugins": ["checkbox"]
     }).on('ready.jstree', function () {
+      // Klappt im default alle Knoten aus
       $(this).jstree('open_all');
     });
 
-    // Populate table
+    // Tabelle erzeugen
     $('table tbody').html(tableData.join(''));
 
-    // Create category buttons
+    // Category-Buttons erzeugen
     const categoryButtons = Array.from(categories).map(category => `<button class="tablebutton">${category}</button></br>`);
     $('#category').html(categoryButtons.join(''));
 
-    // Bind events to category buttons
+    // Logik hinter Category-Buttons
     $('.tablebutton').on('click', function () {
       const selectedCategory = $(this).text();
-      const filteredData = allData.filter(item => item.category === selectedCategory); // use allData instead of data
+      // Tabelle entsprechend filtern
+      const filteredData = allData.filter(item => item.category === selectedCategory); 
       const filteredTableData = filteredData.map(item => {
         return `
           <tr data-tag="${item.tag}">
@@ -137,11 +137,12 @@ $(function () {
           </tr>`;
       });
       $('table tbody').html(filteredTableData.join(''));
+      // JSTree Haken entfernen
       updateJsTree(filteredData);
       initializeObserver();
     });
 
-    // Reset button
+    // Reset-Button
     $('button:contains("Reset")').on('click', function () {
       $('table tbody').html(tableData.join(''));
       $('#jstree').jstree('check_all');
@@ -149,7 +150,7 @@ $(function () {
       initializeObserver();
     });
 
-    // Update table visibility based on jsTree changes
+    // JSTree-Checkboxen: Tabelleinträge ein- und ausblenden
     $('#jstree').on("changed.jstree", function (e, data) {
       const selectedNodes = data.selected.map(nodeId => $('#jstree').jstree(true).get_node(nodeId).text);
       $('table tbody tr').each(function () {
@@ -160,15 +161,18 @@ $(function () {
       initializeObserver();
     });
 
-    // Initialize observer for the first time
+    // IntersectionObserver zum ersten mal aufrufen
     initializeObserver();
   }
 
-  // IntersectionObserver initialization
+  // IntersectionObserver
   function initializeObserver() {
+    //wird ausgeführt wenn ein neues Element sichtbar wird
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
+        // Wenn im Sichtfeld
         if (entry.isIntersecting) {
+          // Zugehöriges JSTree-Element ermitteln
           const visibleTag = entry.target.dataset.tag;
           const jstreePath = visibleTag.split('/').join('_');
           const nodeId = findNodeIdByPath(jstreePath);
@@ -177,26 +181,26 @@ $(function () {
             const nodeElement = $('#' + nodeId + '_anchor');
 
             if (nodeElement.length) {
-              // Reset all other nodes to normal font-weight
+              // Alle JSTree-Elemente werden auf zurückgesetzt
               $('#jstree').find('.jstree-anchor').css("font-weight", "normal");
+              // Aktuelles JSTree-Element wird fett gedruckt
               nodeElement.css("font-weight", "bold");
             }
-          } else {
-            console.warn("Node ID not found for path:", jstreePath);
-          }
+          } 
         }
       });
     }, {
-      threshold: 0.03 // 3% of the row must be visible
+      // Es müssen 3% der Zeile sichtbar sein für einen Callback
+      threshold: 0.03 
     });
 
-    // Unobserve all existing elements before re-observing
+    // Observer soll Tabellenzeilen überwachen
     $('table tbody tr').each(function() {
       observer.observe(this);
     });
   }
 
-  // Find NodeId by Path (used in Observer)
+  // Finde NodeId auf Basis eines Pfads (wird für IntersectionObserver gebraucht)
   function findNodeIdByPath(path) {
     const tree = $('#jstree').jstree(true);
     let foundNodeId = null;
@@ -212,50 +216,54 @@ $(function () {
     return foundNodeId;
   }
 
-  // Initialize observer for the first time
-  initializeObserver();
+// Lunr Suchfunktionalität
+$('#search').on('input', function() {
+  const searchTerm = $(this).val();
 
-  // Search functionality
-  $('#search').on('input', function() {
-    const searchTerm = $(this).val();
+  // Stelle sicher, dass mindestens 2 Zeichen eingegeben wurden
+  if (searchTerm.length >= 2) {
+    // Suche ausführen
+    const results = lunrIndex.search(searchTerm);
+    // Über Ergebnisse iterieren & Tabellendaten filtern
+    const filteredTableData = results.map(result => {
+      const item = allData[result.ref];
+      // Suchwort gelb markieren (via. html)
+      const highlightedContent = highlightTerm(item.content, searchTerm);
 
-    if (searchTerm) {
-      const results = lunrIndex.search(searchTerm);
-      const filteredTableData = results.map(result => {
-        const item = allData[result.ref];
-        const highlightedContent = highlightTerm(item.content, searchTerm);
+      return `
+        <tr data-tag="${item.tag}">
+          <td>${highlightedContent}</td>
+          <td style="display:none;">${item.title || ''}</td>
+          <td style="display:none;">${item.url || ''}</td>
+          <td style="display:none;">${item.created_at || item.date || ''}</td>
+        </tr>`;
+    });
 
-        return `
-          <tr data-tag="${item.tag}">
-            <td>${highlightedContent}</td>
-            <td style="display:none;">${item.title || ''}</td>
-            <td style="display:none;">${item.url || ''}</td>
-            <td style="display:none;">${item.created_at || item.date || ''}</td>
-          </tr>`;
-      });
-      $('table tbody').html(filteredTableData.join(''));
-      updateJsTree(results.map(result => allData[result.ref]));
-      initializeObserver(); 
-    } else {
-      $('table tbody').html(tableData.join(''));
-      $('#jstree').jstree('check_all');
-      $('#jstree').jstree('open_all');
-      initializeObserver(); 
-    }
-  });
+    $('table tbody').html(filteredTableData.join(''));
+    // JSTree entsprechend anpassen 
+    updateJsTree(results.map(result => allData[result.ref]));
+    // Observer auf neue Tabelleninhalte einstellen
+    initializeObserver(); 
+  }
+});
 
-  // Function to highlight the search term in the content
+  // Funktion um Suchwort in der Ausgabe entsprechend zu markieren
   function highlightTerm(html, term) {
+    
+    // Suche nach Term (nicht innerhalb von HTML-Tags)
     const regex = new RegExp(`(${term})(?![^<>]*>)`, 'gi');
 
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
 
+    // Rekursion notwendig wegen verschachtelten Tags (bspw.: <p><span>TEST</span></p>)
     function recursiveHighlight(node) {
+      // Muss Text sein und kein HTML und nicht in IMG, ID oder HREF
       if (node.nodeType === 3) {
         if (!node.parentElement.closest('img') && (!node.parentElement.hasAttribute('id') || !node.parentElement.hasAttribute('href'))) {
           const match = node.nodeValue.match(regex);
           if (match) {
+            // Falls ein Match gefunden -> highlighten
             const span = document.createElement('span');
             span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
             node.parentNode.replaceChild(span, node);
@@ -263,11 +271,13 @@ $(function () {
         }
       } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
         for (let i = 0; i < node.childNodes.length; i++) {
+          // Rekursiver Aufruf
           recursiveHighlight(node.childNodes[i]);
         }
       }
     }
 
+    // Gesamter HTML-Inhalt über alle verschachtelungen durchsuchen (bspw.: <p><span>TEST</span></p>)
     for (let i = 0; i < tempDiv.childNodes.length; i++) {
       recursiveHighlight(tempDiv.childNodes[i]);
     }
@@ -275,7 +285,7 @@ $(function () {
     return tempDiv.innerHTML;
   }
 
-  // Function to update jsTree based on filtered data
+  // JSTree an neue Datenbasis anpassen (Haken setzen/entfernen)
   function updateJsTree(filteredData) {
     const tags = filteredData.map(item => item.tag);
     $('#jstree').jstree('uncheck_all');
