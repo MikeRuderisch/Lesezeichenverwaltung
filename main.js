@@ -1,7 +1,7 @@
 console.log("Lesezeichenverwaltung");
 
 const electron = require("electron");
-const { ipcMain, shell } = require('electron'); // Import shell here only once
+const { ipcMain, shell } = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
@@ -9,7 +9,7 @@ const url = require("url");
 const fs = require("fs");
 
 let window;
-
+//Erzeugen des Electron Fensters
 function createWindow() { 
     window = new BrowserWindow({
         backgroundColor: '#fff',
@@ -21,20 +21,16 @@ function createWindow() {
         }
     });
 
-    // Handle external URLs to open in the default system browser
-    window.webContents.setWindowOpenHandler(({ url }) => {
-        shell.openExternal(url);
-        return { action: 'deny' };
-    });
 
-    // Load the main HTML file
+
+    // Haupt-HTML-Datei laden
     window.loadURL(url.format({
         pathname: path.join(__dirname, "index.html"),
         protocol: "file",
         slashes: true
     }));
 
-    // Show developer tools (optional)
+    // Entwickler-Tools anzeigen (optional)
     //window.webContents.openDevTools();
 
     window.on("closed", () => {
@@ -42,40 +38,27 @@ function createWindow() {
     });
 }
 
-// Listen for external link open requests from the Renderer process
+// Hört auf Anfragen vom Renderer-Prozess zum Öffnen externer Links
 ipcMain.on('open-external', (event, url) => {
-    shell.openExternal(url);
+    shell.openExternal(url); // Öffnet externen Link
 });
 
-// Example IPC listener for other messages
-ipcMain.on("messageChannel", (event, message) => {
-    console.log(message); // "Hello from Renderer"
-    event.reply("replyChannel", "Received your message!");
-});
 
-// Create the window when Electron is ready
+// Fenster erstellen, wenn Electron bereit ist
 app.on("ready", createWindow);
 
-/*const dataPath = path.join(__dirname, 'view1/bookmarks.json');
-fs.readFile(dataPath, (err, data) => {
-    if (err) throw err;
-    // Send data to the renderer process
-
-    console.log("Daten senden");
-    window.on('ready-to-show', () => {
-    window.webContents.send('data', JSON.parse(data));
-    });
-}); */
-// Listen for the save request from the renderer process
+//Hört auf Anfragen  der JSON-Daten von View1 an Main, um sie zu speichern
 ipcMain.on('save-json', (event, data) => {
-    const filePath = path.join(__dirname,'View1', 'bookmarks.json'); // Speichern im gleichen Ordner wie die index.html
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8'); // Formatierte JSON speichern
+    const filePath = path.join(__dirname,'View1', 'bookmarks.json'); 
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8'); 
     console.log('JSON file saved successfully at:', filePath);
     event.reply('save-json-reply', `Datei erfolgreich gespeichert: ${filePath}`);
 });
+
+// Hört auf Anfragen  der JSON-Daten von View2 an Main, um sie zu speichern
 ipcMain.on('save-json2', (event, data) => {
-    const filePath = path.join(__dirname,'View2', 'longForm_Articles.json'); // Speichern im gleichen Ordner wie die index.html
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8'); // Formatierte JSON speichern
+    const filePath = path.join(__dirname,'View2', 'longForm_Articles.json');
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
     console.log('JSON file saved successfully at:', filePath);
     event.reply('save-json-reply', `Datei erfolgreich gespeichert: ${filePath}`);
 });

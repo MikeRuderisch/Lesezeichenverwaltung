@@ -13,17 +13,17 @@
   <tab-group sortable="true"></tab-group>
   <script src="node_modules/electron-tabs/dist/electron-tabs.js"></script>
   <script>
-    // Initialize the tab group
+    // Initialisieren der electron tab gruppe
     const tabGroup = document.querySelector("tab-group");
 
-    // Add default tabs
+    // Hinzufügen der standard tabs
     const tab1 = tabGroup.addTab({
       title: "Alle Lesezeichen",
       src: "view1/view1.html",
       active: true,
       closable: false,
       webviewAttributes: {
-        preload: 'preload.js', // Preload script path (without path.join)
+        preload: 'preload.js', // Laden des preload skripts für view1 um url öffnen und speichern der json zu ermöglichen
         nodeintegration: false,
         contextIsolation: true
       }
@@ -34,13 +34,12 @@
       src: "view2/view2.html",
       closable: false,
       webviewAttributes: {
-        preload: 'preload.js', 
+        preload: 'preload.js', // Laden des preload skripts für view2 um speichern der json zu ermöglichen
         nodeintegration: false,
         contextIsolation: true
       }
     });
 
   </script>
-  <script src="renderer_general.js"></script>
 </body>
 </html>
